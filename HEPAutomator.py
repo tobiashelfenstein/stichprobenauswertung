@@ -12,3 +12,15 @@ class HEPAutomator():
             self.hep.type_keys("{ENTER}")
 
         return True
+
+    def sendMeasuredValues(self, values):
+        # unpack measured values as length and diameter
+        l, d = values
+
+        # TODO length
+
+        self.hep.type_keys(d)
+        self.hep.type_keys("{ENTER}")
+
+        return True
+

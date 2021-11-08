@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QDialog
 
 from SpeciesDialog import SpeciesDialog
-
+from BluetoothProgressDialog import BluetoothProgressDialog
 import os.path
 import sys
 
@@ -34,6 +34,7 @@ class MainWindow(QMainWindow):
 
         # connect signals
         self.fileImportBtn.clicked.connect(self.fileImportAction)
+        self.blueImportBtn.clicked.connect(self.blueImportAction)
 
 
     def setupUi(self):
@@ -41,11 +42,17 @@ class MainWindow(QMainWindow):
 
         centralWidget = QWidget()
 
-        layout = QHBoxLayout()
+        layout = QVBoxLayout()
 
         # file import button
         self.fileImportBtn = QPushButton("Stichprobe einlesen")
+        self.fileImportBtn.setMinimumHeight(60)
         layout.addWidget(self.fileImportBtn)
+
+        # bluetooth import button
+        self.blueImportBtn = QPushButton("Bluetooth übertragen")
+        self.blueImportBtn.setMinimumHeight(60)
+        layout.addWidget(self.blueImportBtn)
 
         centralWidget.setLayout(layout)
         self.setCentralWidget(centralWidget)
@@ -62,6 +69,17 @@ class MainWindow(QMainWindow):
         speciesDialog.setSpecies(self.model.species)
         if speciesDialog.exec() == QDialog.Accepted:
             self.controller.sendSampleToHEP(speciesDialog.getSpecies())
+
+    def blueImportAction(self):
+        # question for length
+        
+        # TODO Reihenfolge
+        self.controller.startBluetoothMeasuring()
+
+        progressDialog = BluetoothProgressDialog(self)
+        progressDialog.accepted.connect(self.model.stopBluetoothImport)
+        #progressDialog.setModal(True)
+        progressDialog.show()
 
 
 

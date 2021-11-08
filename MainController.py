@@ -16,10 +16,26 @@ class MainController():
         #self.automator = HEPAutomator("z:\\downloads\\hepwfp\\rhpf.exe")
         self.automator = HEPAutomator("c:\\hepwfp\\rhpf.exe")
 
+        # connect signals
+        self.model.measuredValuesReady.connect(self.sendBluetoothToHEP)
+
     def readSampleFile(self, filename):
+        self.model.initializeImporter("xml")
         self.model.sampleImport(filename)
 
     def sendSampleToHEP(self, species):
         self.automator.sendSample(self.model.getSampleBySpecies(species))
-        
+
+    def startBluetoothMeasuring(self, withLength=False):
+        self.model.initializeImporter("bluetooth")
+        self.model.bluetoothImport(withLength)
+            #values = self.model.bluetoothImport(withLength)
+            #if not values is None:
+            #    print(values)
+            #    #self.automator.sendMeasuredValue(values)
+
+    def sendBluetoothToHEP(self):
+        values = self.model.getMeasuredValues()
+        if not values is None:
+            self.automator.sendMeasuredValues(values)
 

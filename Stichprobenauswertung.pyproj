@@ -21,6 +21,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BluetoothProgressDialog.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="HaglofBluetoothImporter.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HaglofFileImporter.py">
       <SubType>Code</SubType>
     </Compile>
@@ -36,9 +42,6 @@
     </Compile>
     <Compile Include="SpeciesDialog.py" />
     <Compile Include="MainWindow.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SampleBluetoothController.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SampleModel.py">

@@ -14,9 +14,9 @@ if sys.platform == 'win32':
 
 options = {
     'build_exe': {
-        "excludes": ["PyQt5.QtSensors", "PyQt5.QtWebChannel", "PyQt5.QtMultimedia"],
-        "packages": ["os", "sys", "pywinauto"],
-        "includes": ["atexit"],
+        #"excludes": ["PyQt5.QtSensors", "PyQt5.QtWebChannel", "PyQt5.QtMultimedia"],
+        "packages": ["os", "sys", "pywinauto", "serial"],
+        #"includes": ["atexit"],
         "include_files" : ["examples"],
         "include_msvcr": True
     }
