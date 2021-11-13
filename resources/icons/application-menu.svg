@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px"
+	 height="36px" viewBox="0 0 40 36" enable-background="new 0 0 40 36" xml:space="preserve">
+<g id="Ebene_1">
+	<g>
+		<g>
+			
+				<line fill="none" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x1="10" y1="10" x2="30" y2="10"/>
+			
+				<line fill="none" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x1="10" y1="18" x2="30" y2="18"/>
+			
+				<line fill="none" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x1="10" y1="26" x2="30" y2="26"/>
+		</g>
+		<path fill="none" stroke="#808080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M38,28.667
+			C38,31.613,35.984,34,33.5,34h-27C4.014,34,2,31.613,2,28.667V7.334C2,4.388,4.014,2,6.5,2h27C35.984,2,38,4.388,38,7.334V28.667z
+			"/>
+	</g>
+</g>
+<g id="Ebene_2">
+	<g>
+		<path fill="#808080" d="M59.685,34.532V6.611h5.562l6.608,19.77c0.609,1.841,1.054,3.219,1.334,4.133
+			c0.317-1.016,0.812-2.508,1.485-4.476l6.686-19.427h4.97v27.921h-3.561V11.163l-8.113,23.369h-3.334l-8.075-23.769v23.769H59.685z
+			"/>
+		<path fill="#808080" d="M92.368,34.532V6.611h20.188v3.295H96.062v8.551h15.446v3.276H96.062v9.504h17.141v3.295H92.368z"/>
+		<path fill="#808080" d="M118.27,34.532V6.611h3.79l14.667,21.921V6.611h3.542v27.921h-3.79l-14.666-21.94v21.94H118.27z"/>
+		<path fill="#808080" d="M164.798,6.611h3.695v16.132c0,2.806-0.317,5.034-0.953,6.685c-0.635,1.651-1.78,2.993-3.438,4.028
+			c-1.656,1.035-3.831,1.552-6.522,1.552c-2.616,0-4.755-0.451-6.419-1.352s-2.851-2.207-3.561-3.914
+			c-0.711-1.708-1.066-4.041-1.066-6.999V6.611h3.694v16.112c0,2.426,0.226,4.212,0.677,5.361c0.45,1.149,1.225,2.035,2.324,2.657
+			c1.098,0.622,2.44,0.933,4.028,0.933c2.717,0,4.653-0.616,5.81-1.847c1.155-1.231,1.732-3.6,1.732-7.104V6.611z M152.114,4.897
+			V0.993h3.581v3.904H152.114z M159.218,4.897V0.993h3.581v3.904H159.218z"/>
+	</g>
+</g>
+</svg>

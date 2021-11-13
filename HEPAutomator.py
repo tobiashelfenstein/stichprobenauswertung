@@ -6,6 +6,7 @@ class HEPAutomator():
         app = Application().connect(path=hepExecutable)
         self.hep = app.window(title_re=".*Holzaufnahme LF Rheinland-Pfalz")
 
+
     def sendSample(self, sample):
         for value in sample:
             self.hep.type_keys(value)

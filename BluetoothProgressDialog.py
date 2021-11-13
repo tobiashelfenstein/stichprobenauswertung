@@ -1,9 +1,13 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QComboBox
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize
 
 import os.path
 import sys
@@ -27,16 +31,34 @@ class BluetoothProgressDialog(QDialog):
         self.setupUi()
 
         # connect signals
+        self.abortImportBtn.clicked.connect(self.reject)
         self.finishImportBtn.clicked.connect(self.accept)
 
     def setupUi(self):
-        self.setWindowTitle("Bluetooth Datenübertragung")
+        self.setWindowTitle("Datenübertragung")
 
-        layout = QHBoxLayout()
+        mainLayout = QVBoxLayout()
+        self.setLayout(mainLayout)
 
-        # start import button
-        self.finishImportBtn = QPushButton("Fertig")
+        # status label
+        self.statusLabel = QLabel("Kluppdaten: übertragen ...")
+        mainLayout.addWidget(self.statusLabel)
+
+        # buttons
+        abortIcon = QIcon(os.path.join("resources", "icons", "application-back.svg"))
+        self.abortImportBtn = QPushButton(abortIcon, "")
+        self.abortImportBtn.setMinimumHeight(60)
+        self.abortImportBtn.setIconSize(QSize(40, 40))
+
+        finishIcon = QIcon(os.path.join("resources", "icons", "application-next.svg"))
+        self.finishImportBtn = QPushButton(finishIcon, "")
         self.finishImportBtn.setMinimumHeight(60)
-        layout.addWidget(self.finishImportBtn)
+        self.finishImportBtn.setIconSize(QSize(40, 40))
+        self.finishImportBtn.setDefault(True)
+        #self.finishImportBtn.setFocus()
 
-        self.setLayout(layout)
+        buttonLayout = QHBoxLayout()
+        mainLayout.addLayout(buttonLayout)
+        buttonLayout.addWidget(self.abortImportBtn)
+        buttonLayout.addWidget(self.finishImportBtn)
+

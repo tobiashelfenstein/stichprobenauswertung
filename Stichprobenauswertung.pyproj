@@ -40,6 +40,7 @@
     <Compile Include="setup.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileImportDialog.py" />
     <Compile Include="SpeciesDialog.py" />
     <Compile Include="MainWindow.py">
       <SubType>Code</SubType>
@@ -51,9 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="examples\" />
+    <Folder Include="resources\" />
+    <Folder Include="resources\icons\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="examples\kluppfall.txt" />
     <Content Include="examples\kluppfall.xml" />
+    <Content Include="resources\icons\application-abort.svg" />
+    <Content Include="resources\icons\application-back.svg" />
+    <Content Include="resources\icons\application-menu.svg" />
+    <Content Include="resources\icons\application-next.svg" />
+    <Content Include="resources\icons\input-warning.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

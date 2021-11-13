@@ -5,6 +5,9 @@ from PyQt5.QtWidgets import QPushButton
 
 from HEPAutomator import HEPAutomator
 
+import pywinauto
+from PyQt5.QtWidgets import QMessageBox
+
 
 __version__ = "0.0.1"
 
@@ -13,8 +16,14 @@ class MainController():
     def __init__(self, model):
         super().__init__()
         self.model = model
-        #self.automator = HEPAutomator("z:\\downloads\\hepwfp\\rhpf.exe")
-        self.automator = HEPAutomator("c:\\hepwfp\\rhpf.exe")
+        try:
+            #self.automator = HEPAutomator("z:\\downloads\\hepwfp\\rhpf.exe")
+            self.automator = HEPAutomator("c:\\hepwfp\\rhpf.exe")
+        except (pywinauto.application.ProcessNotFoundError) as e:
+            dlg = QMessageBox()
+            dlg.setIcon(QMessageBox.Critical)
+            dlg.setText("HEP wurde nicht gestartet!")
+            dlg.exec()
 
         # connect signals
         self.model.measuredValuesReady.connect(self.sendBluetoothToHEP)

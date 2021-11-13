@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QDialog
 
+from FileImportDialog import FileImportDialog
 from SpeciesDialog import SpeciesDialog
 from BluetoothProgressDialog import BluetoothProgressDialog
 import os.path
@@ -27,7 +28,7 @@ class MainWindow(QMainWindow):
         self.controller = mainCtrl
 
         # setup gui
-        self.setMinimumSize(800, 500)
+        #self.setMinimumSize(800, 500)
 
         # create basic elements
         self.setupUi()
@@ -35,6 +36,7 @@ class MainWindow(QMainWindow):
         # connect signals
         self.fileImportBtn.clicked.connect(self.fileImportAction)
         self.blueImportBtn.clicked.connect(self.blueImportAction)
+        self.quitBtn.clicked.connect(self.close)
 
 
     def setupUi(self):
@@ -53,22 +55,33 @@ class MainWindow(QMainWindow):
         self.blueImportBtn = QPushButton("Bluetooth übertragen")
         self.blueImportBtn.setMinimumHeight(60)
         layout.addWidget(self.blueImportBtn)
+        layout.addSpacing(30)
+
+        # quit button
+        self.quitBtn = QPushButton("Beenden")
+        self.quitBtn.setMinimumHeight(60)
+        layout.addWidget(self.quitBtn)
 
         centralWidget.setLayout(layout)
         self.setCentralWidget(centralWidget)
 
     def fileImportAction(self):
-        # TODO
-        #filename = QFileDialog.getOpenFileName(self, "Stichprobe öffnen", "z:\\source\\repos", "XML Datei (*.xml)", None, QFileDialog.DontUseNativeDialog)
-        filename = QFileDialog.getOpenFileName(self, "Stichprobe öffnen", "c:\\hepwfp_helper\\stichprobenauswertung\\kluppdaten", "XML Datei (*.xml)", None, QFileDialog.DontUseNativeDialog)
+        importFile = ""
+        deviceName = ""
 
-        if filename[0]:
-            self.controller.readSampleFile(filename[0])
+        importDialog = FileImportDialog()
+        if importDialog.exec() == QDialog.Accepted:
+            importFile = importDialog.getFilePath()
+            deviceName = importDialog.getDeviceName()
 
-        speciesDialog = SpeciesDialog()
-        speciesDialog.setSpecies(self.model.species)
-        if speciesDialog.exec() == QDialog.Accepted:
-            self.controller.sendSampleToHEP(speciesDialog.getSpecies())
+            # start importing
+            self.controller.readSampleFile(importFile)
+
+            # select species
+            speciesDialog = SpeciesDialog()
+            speciesDialog.setSpecies(self.model.species)
+            if speciesDialog.exec() == QDialog.Accepted:
+                self.controller.sendSampleToHEP(speciesDialog.getSpecies())
 
     def blueImportAction(self):
         # question for length

@@ -1,9 +1,13 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QComboBox
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize
 
 import os.path
 import sys
@@ -27,22 +31,43 @@ class SpeciesDialog(QDialog):
         self.setupUi()
 
         # connect signals
+        self.abortImportBtn.clicked.connect(self.reject)
         self.startImportBtn.clicked.connect(self.accept)
 
     def setupUi(self):
-        self.setWindowTitle("Baumartenauswahl")
+        self.setWindowTitle("Baumartenwahl")
 
-        layout = QHBoxLayout()
+        mainLayout = QVBoxLayout()
+        self.setLayout(mainLayout)
+
+        # information label
+        self.infoLabel = QLabel("Baumart:")
+        mainLayout.addWidget(self.infoLabel)
 
         # species selection
         self.speciesComboBox = QComboBox()
-        layout.addWidget(self.speciesComboBox)
+        self.speciesComboBox.setMinimumHeight(60)
+        self.speciesComboBox.setMinimumWidth(200)
+        mainLayout.addWidget(self.speciesComboBox)
+        mainLayout.addSpacing(20)
 
-        # start import button
-        self.startImportBtn = QPushButton("Starten")
-        layout.addWidget(self.startImportBtn)
+        # buttons
+        abortIcon = QIcon(os.path.join("resources", "icons", "application-back.svg"))
+        self.abortImportBtn = QPushButton(abortIcon, "")
+        self.abortImportBtn.setMinimumHeight(60)
+        self.abortImportBtn.setIconSize(QSize(40, 40))
 
-        self.setLayout(layout)
+        startIcon = QIcon(os.path.join("resources", "icons", "application-next.svg"))
+        self.startImportBtn = QPushButton(startIcon, "")
+        self.startImportBtn.setMinimumHeight(60)
+        self.startImportBtn.setIconSize(QSize(40, 40))
+        self.startImportBtn.setDefault(True)
+        #self.startImportBtn.setFocus()
+
+        buttonLayout = QHBoxLayout()
+        mainLayout.addLayout(buttonLayout)
+        buttonLayout.addWidget(self.abortImportBtn)
+        buttonLayout.addWidget(self.startImportBtn)
 
     def setSpecies(self, species):
         self.speciesComboBox.insertItems(0, species)
