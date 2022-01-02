@@ -37,6 +37,9 @@
     <Compile Include="MainController.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MasserFileImporter.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="setup.py">
       <SubType>Code</SubType>
     </Compile>
