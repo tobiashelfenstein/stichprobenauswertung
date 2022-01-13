@@ -1,0 +1,17 @@
+$PHGF,SPC,1,1 Fi SB,*67\r\n'
+$PHGF,DIA,M,345,*2A\r\n'
+$PHGF,SPC,1,1 Fi SB,*67\r\n'
+$PHGF,DIA,M,144,*29\r\n'
+$PHGF,SPC,1,1 Fi SB,*67\r\n'
+$PHGF,DIA,M,236,*2F\r\n'
+$PHGF,SPC,1,1 Fi SB,*67\r\n'
+$PHGF,DIA,M,84,*14\r\n'
+$PHGF,SPC,1,1 Fi SB,*67\r\n'
+$PHGF,DIA,M,269,*25\r\n'
+$PHGF,SPC,1,1 Fi SB,*67\r\n'
+$PHGF,DIA,M,129,*22\r\n'
+
+b''
+b'$PHGF,LEN,M,193,*28\r\n'
+
+
