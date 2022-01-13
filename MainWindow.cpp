@@ -49,8 +49,8 @@ void MainWindow::setupUi()
 
 void MainWindow::blueImportAction()
 {
-	this->importer = new HaglofBluetoothImporter();
-	importer->open("\\\\.\\COM11", 9600);
+	HaglofBluetoothImporter importer;
+	importer.open("\\\\.\\COM11", 9600);
 
 	BluetoothProgressDialog dlg_progress;
 	dlg_progress.exec();

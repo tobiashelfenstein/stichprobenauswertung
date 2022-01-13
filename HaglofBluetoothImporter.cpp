@@ -1,42 +1,11 @@
 #include "HaglofBluetoothImporter.h"
 
 #include <QtSerialPort/QSerialPort>
+#include <QtCore/QList>
 #include <iostream>
 
 
 
-
-void HaglofBluetoothImporter::read()
-{
-	char nmea[1024];
-	qint64 line_length = -1;
-
-	QStringList nmea_fields;
-	float d;
-
-	QByteArray data = this->bt_port->readAll();
-	std::cout << data.toStdString();
-	//while (!this->stop)
-	//{
-	//	//line_length = this->bt_port.read(nmea, sizeof(nmea));
-	//	QByteArray data = this->bt_port.readAll();
-	//	std::cout << data.toStdString();
-	//	if (line_length != -1)
-	//	{
-	//		nmea_fields = this->parseHaglofNMEA(nmea);
-	//		std::cout << nmea_fields[1].toStdString() << std::endl;
-	//		if (nmea_fields[1] == "DIA")
-	//		{
-	//			d = nmea_fields[3].toInt() / 10;
-	//			emit diameter(floor(d));
-	//		}
-	//	}
-	//}
-
-	//emit finished(true);
-
-	return;
-}
 
 HaglofBluetoothImporter::HaglofBluetoothImporter() : QObject()
 {
@@ -58,43 +27,49 @@ void HaglofBluetoothImporter::open(QString com_port, qint64 baud_rate)
 	// open connection
 	this->bt_port->open(QIODevice::ReadOnly);
 
-	//while (true)
-	//{
+	return;
+}
 
-	//	if (this->bt_port.waitForReadyRead(1000))
-	//	{
-	//		QByteArray test = this->bt_port.readAll();
-	//		/*while (this->bt_port.waitForReadyRead(10))
-	//		{
-	//			test += this->bt_port.readAll();
-	//		}*/
+void HaglofBluetoothImporter::read()
+{
+	QString nmea = "";
+	qint64 line_length = -1;
 
-	//		const QString ausgabe = QString::fromUtf8(test);
-	//		std::cout << ausgabe.toStdString() << std::endl;
-	//	}
-	//	else {
-	//		std::cout << "Timeout!" << std::endl;
-	//	}
-	//}
+	QStringList nmea_fields;
+	float d;
+
+	QByteArray data = this->bt_port->readAll();
+	this->parseHaglofNMEA(&data);
 
 	return;
 }
 
-QStringList HaglofBluetoothImporter::parseHaglofNMEA(QString nmea)
+void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 {
-	if (nmea.left(5) == "$PHGF")
-	{
-		return nmea.split(',');
-	}
-	else
-	{
-		return QStringList{ "", "", "", "" };
-	}
-}
+	QList<QByteArray> nmea_fields;
+	float value = 0;
 
-void HaglofBluetoothImporter::printDiameter(int d)
-{
-	std::cout << d << std::endl;
+	if (data->left(5).compare("$PHGF") == 0)
+	{
+		nmea_fields = data->split(',');
+		switch (nmea_fields[1].at(0))
+		{
+		case 'D':
+			// parse diameter
+			value = nmea_fields[3].toInt() / 10;
+			emit diameter(floor(value));
+
+			break;
+
+		case 'L':
+			// parse length
+			break;
+
+		default:
+			// kann eventuell weggelassen werden
+			break;
+		}
+	}
 
 	return;
 }

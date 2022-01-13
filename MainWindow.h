@@ -20,8 +20,5 @@ public:
 
 public slots:
 	void blueImportAction();
-
-private:
-	HaglofBluetoothImporter* importer = nullptr;
 };
 

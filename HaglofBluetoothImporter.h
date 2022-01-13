@@ -16,7 +16,6 @@ class HaglofBluetoothImporter : public QObject
 	Q_OBJECT
 
 public slots:
-	void printDiameter(int d);
 	void read();
 
 public:
@@ -29,10 +28,9 @@ private:
 	std::vector<HaglofData> measuredData;
 	QSerialPort* bt_port;
 
-	QStringList parseHaglofNMEA(QString nmea);
+	void parseHaglofNMEA(QByteArray* data);
 
 signals:
-	void finished(bool f);
 	void diameter(int d);
 };
 
