@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "HaglofBluetoothImporter.h"
+#include "SampleModel.h"
 
 
 class MainWindow : public QMainWindow
@@ -20,5 +21,8 @@ public:
 
 public slots:
 	void blueImportAction();
+
+private:
+	SampleModel* model;
 };
 

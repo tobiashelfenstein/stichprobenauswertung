@@ -1,3 +1,4 @@
+#include "AbstractImporter.h"
 #include "HaglofBluetoothImporter.h"
 
 #include <QtSerialPort/QSerialPort>
@@ -7,10 +8,11 @@
 
 
 
-HaglofBluetoothImporter::HaglofBluetoothImporter() : QObject()
+HaglofBluetoothImporter::HaglofBluetoothImporter() : AbstractImporter()
 {
 	this->bt_port = new QSerialPort(this);
 	connect(this->bt_port, &QSerialPort::readyRead, this, &HaglofBluetoothImporter::read);
+	connect(this, &HaglofBluetoothImporter::measured, this, &HaglofBluetoothImporter::pushMeasuredData);
 }
 
 HaglofBluetoothImporter::~HaglofBluetoothImporter()
@@ -32,12 +34,6 @@ void HaglofBluetoothImporter::open(QString com_port, qint64 baud_rate)
 
 void HaglofBluetoothImporter::read()
 {
-	QString nmea = "";
-	qint64 line_length = -1;
-
-	QStringList nmea_fields;
-	float d;
-
 	QByteArray data = this->bt_port->readAll();
 	this->parseHaglofNMEA(&data);
 
@@ -47,7 +43,6 @@ void HaglofBluetoothImporter::read()
 void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 {
 	QList<QByteArray> nmea_fields;
-	float value = 0;
 
 	if (data->left(5).compare("$PHGF") == 0)
 	{
@@ -56,13 +51,40 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 		{
 		case 'D':
 			// parse diameter
-			value = nmea_fields[3].toInt() / 10;
-			emit diameter(floor(value));
+			
+			// first check, if length is needed instead of diameter
+			if (this->waitForLength)
+			{
+				std::cout << "Fehler: Länge wurde erwartet!" << std::endl;
+				break;
+			}
+
+			this->diameter = floor(nmea_fields[3].toInt() / 10);
+
+			// set waitForLength to true, if length is needed in next step
+			this->waitForLength = this->with_length_and_diameter;
+
+			emit measured;
 
 			break;
 
 		case 'L':
 			// parse length
+
+			// first check, if length is needed instead of diameter
+			if (!this->with_length_and_diameter && this->waitForDiameter)
+			{
+				std::cout << "Fehler: Durchmesser wurde erwartet!" << std::endl;
+				break;
+			}
+
+			this->length = nmea_fields[3].toFloat() / 10;
+
+			// set waitForLength to true, if length is needed in next step
+			this->waitForDiameter = this->with_length_and_diameter;
+
+			emit measured;
+
 			break;
 
 		default:
@@ -72,4 +94,12 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 	}
 
 	return;
+}
+
+void HaglofBluetoothImporter::pushMeasuredData()
+{
+	if (!this->waitForLength)
+	{
+		// durchmesser senden
+	}
 }

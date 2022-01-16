@@ -54,6 +54,7 @@ BOOL CALLBACK HEPAutomator::findHEPVisibleWindow(HWND handle, LPARAM lparam)
 
 bool HEPAutomator::sendMeasuredValues(int num)
 {
+	std::cout << num << std::endl;
 	// split number into digits
 	std::vector<int> digits;
 	while (num > 0)

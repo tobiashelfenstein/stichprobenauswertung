@@ -1,17 +1,10 @@
 #pragma once
 
+#include "AbstractImporter.h"
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
 
-struct HaglofData
-{
-	std::wstring species;
-	long diameter;
-	long height1;
-};
-
-
-class HaglofBluetoothImporter : public QObject
+class HaglofBluetoothImporter : public AbstractImporter
 {
 	Q_OBJECT
 
@@ -25,12 +18,18 @@ public:
 	void open(QString port, qint64 rate);
 
 private:
-	std::vector<HaglofData> measuredData;
 	QSerialPort* bt_port;
 
+	qint64 diameter = 0;
+	float length = 0.0;
+
+	bool waitForDiameter = true;
+	bool waitForLength = false;
+
 	void parseHaglofNMEA(QByteArray* data);
+	void pushMeasuredData();
 
 signals:
-	void diameter(int d);
+	void measured();
 };
 

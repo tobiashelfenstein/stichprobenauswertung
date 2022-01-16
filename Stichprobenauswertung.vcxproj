@@ -92,6 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractImporter.cpp" />
     <ClCompile Include="BluetoothProgressDialog.cpp" />
     <ClCompile Include="HaglofBluetoothImporter.cpp" />
     <ClCompile Include="HaglofFileImporter.cpp" />
@@ -99,10 +100,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MasserFileImporter.cpp" />
+    <ClCompile Include="SampleModel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="SampleModel.h" />
     <QtMoc Include="HaglofBluetoothImporter.h" />
     <QtMoc Include="BluetoothProgressDialog.h" />
+    <QtMoc Include="AbstractImporter.h" />
     <ClInclude Include="HaglofFileImporter.h" />
     <ClInclude Include="HEPAutomator.h" />
     <QtMoc Include="MainWindow.h" />

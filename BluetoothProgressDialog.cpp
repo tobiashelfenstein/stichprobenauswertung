@@ -33,7 +33,7 @@ void BluetoothProgressDialog::setupUi()
 	btn_import_abort->setIconSize(QSize(40, 40));
 	button_layout->addWidget(btn_import_abort);
 
-	connect(btn_import_abort, SIGNAL(clicked()), this, SLOT(reject()));
+	connect(btn_import_abort, &QPushButton::clicked, this, &BluetoothProgressDialog::reject);
 
 	QIcon icn_finish("resources\\icons\\application-next.svg");
 	QPushButton* btn_import_finish = new QPushButton(icn_finish, "");
@@ -42,7 +42,7 @@ void BluetoothProgressDialog::setupUi()
 	btn_import_finish->setDefault(true);
 	button_layout->addWidget(btn_import_finish);
 
-	connect(btn_import_finish, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(btn_import_finish, &QPushButton::clicked, this, &BluetoothProgressDialog::accept);
 
 	return;
 }

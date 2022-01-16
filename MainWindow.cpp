@@ -7,6 +7,11 @@
 
 MainWindow::MainWindow() : QMainWindow()
 {
+	// create model
+	// alternativ create the model in main function
+	this->model = new SampleModel();
+
+	// create main widget with buttons and set as central widget
 	this->setupUi();
 }
 
@@ -33,7 +38,7 @@ void MainWindow::setupUi()
 	btn_bluetooth_import->setMinimumHeight(60);
 	layout->addWidget(btn_bluetooth_import);
 
-	connect(btn_bluetooth_import, SIGNAL(clicked()), this, SLOT(blueImportAction()));
+	connect(btn_bluetooth_import, &QPushButton::clicked, this, &MainWindow::blueImportAction);
 
 	layout->addSpacing(30);
 
@@ -42,6 +47,8 @@ void MainWindow::setupUi()
 	btn_quit->setMinimumHeight(60);
 	layout->addWidget(btn_quit);
 
+	connect(btn_quit, &QPushButton::clicked, this, &MainWindow::close);
+
 	this->setCentralWidget(central_widget);
 
 	return;
@@ -49,8 +56,12 @@ void MainWindow::setupUi()
 
 void MainWindow::blueImportAction()
 {
-	HaglofBluetoothImporter importer;
-	importer.open("\\\\.\\COM11", 9600);
+	// TODO
+	// settings dialog
+	// port selecion; baud selection
+	// lenth and diameter selection
+
+	this->model->initializeImporter(HAGLOF, "\\\\.\\COM11", 9600);
 
 	BluetoothProgressDialog dlg_progress;
 	dlg_progress.exec();

@@ -50,6 +50,12 @@
     <ClCompile Include="BluetoothProgressDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SampleModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HaglofFileImporter.h">
@@ -76,13 +82,19 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="HaglofBluetoothImporter.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="BluetoothProgressDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SampleModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AbstractImporter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="HaglofBluetoothImporter.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
