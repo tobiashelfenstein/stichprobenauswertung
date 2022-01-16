@@ -4,12 +4,12 @@
 #include "AbstractImporter.h"
 #include <QObject>
 
-struct MeasuredData
-{
-	std::wstring species;
-	long diameter;
-	long height1;
-};
+//struct MeasuredData
+//{
+//	std::wstring species;
+//	long diameter;
+//	long height1;
+//};
 
 enum MANUFACTURERS
 {
@@ -35,6 +35,6 @@ private:
 	AbstractImporter* importer = nullptr;
 
 public slots:
-	void sendToHEP(int diameter);
+	void sendToHEP(MeasuredData data);
 };
 

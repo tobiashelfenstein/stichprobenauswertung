@@ -10,6 +10,7 @@ class HaglofBluetoothImporter : public AbstractImporter
 
 public slots:
 	void read();
+	void pushMeasuredData();
 
 public:
 	HaglofBluetoothImporter();
@@ -23,11 +24,11 @@ private:
 	qint64 diameter = 0;
 	float length = 0.0;
 
-	bool waitForDiameter = true;
-	bool waitForLength = false;
+	bool diameter_measured = false;
+	bool length_measured = false;
 
 	void parseHaglofNMEA(QByteArray* data);
-	void pushMeasuredData();
+	void resetMeasuredData();
 
 signals:
 	void measured();

@@ -29,7 +29,7 @@ void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate)
 		this->importer->open(port, rate);
 
 		// connect to importer events
-		connect(this->importer, &AbstractImporter::diameter, this, &SampleModel::sendToHEP);
+		connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::sendToHEP);
 
 		break;
 
@@ -38,7 +38,7 @@ void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate)
 	}
 }
 
-void SampleModel::sendToHEP(int diameter)
+void SampleModel::sendToHEP(MeasuredData data)
 {
 	// for testing only
 	// better function needed
@@ -46,7 +46,9 @@ void SampleModel::sendToHEP(int diameter)
 		std::cout << "Fehler: HEP wurde nicht geöffnet!" << std::endl;
 	}
 
-	this->automator->sendMeasuredValues(diameter);
+	std::cout << "Länge: " << data.length << " Durchmesser: " << data.diameter << std::endl;
+
+	//this->automator->sendMeasuredValues(diameter);
 
 	return;
 }

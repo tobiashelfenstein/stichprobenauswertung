@@ -51,39 +51,31 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 		{
 		case 'D':
 			// parse diameter
-			
-			// first check, if length is needed instead of diameter
-			if (this->waitForLength)
+			if (this->diameter_measured)
 			{
 				std::cout << "Fehler: Länge wurde erwartet!" << std::endl;
 				break;
 			}
 
 			this->diameter = floor(nmea_fields[3].toInt() / 10);
+			this->diameter_measured = true;
 
-			// set waitForLength to true, if length is needed in next step
-			this->waitForLength = this->with_length_and_diameter;
-
-			emit measured;
+			emit measured();
 
 			break;
 
 		case 'L':
 			// parse length
-
-			// first check, if length is needed instead of diameter
-			if (!this->with_length_and_diameter && this->waitForDiameter)
+			if (!this->with_length_and_diameter || this->length_measured)
 			{
 				std::cout << "Fehler: Durchmesser wurde erwartet!" << std::endl;
 				break;
 			}
 
 			this->length = nmea_fields[3].toFloat() / 10;
+			this->length_measured = true;
 
-			// set waitForLength to true, if length is needed in next step
-			this->waitForDiameter = this->with_length_and_diameter;
-
-			emit measured;
+			emit measured();
 
 			break;
 
@@ -98,8 +90,29 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 
 void HaglofBluetoothImporter::pushMeasuredData()
 {
-	if (!this->waitForLength)
+	if (!this->diameter_measured || this->length_measured != this->with_length_and_diameter)
 	{
-		// durchmesser senden
+		std::cout << "Kein Wert zu senden" << std::endl;
+		return;
 	}
+
+	MeasuredData data = { "", this->diameter, this->length };
+	emit hasMeasured(data);
+
+	this->resetMeasuredData();
+
+	return;
+}
+
+void HaglofBluetoothImporter::resetMeasuredData()
+{
+	// reset measured diameter
+	this->diameter = 0;
+	this->diameter_measured = false;
+
+	// reset measured length
+	this->length = 0;
+	this->length_measured = 0.0;
+
+	return;
 }

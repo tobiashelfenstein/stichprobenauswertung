@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-struct MasserData
+struct MeasuredData
 {
 	QString species;
 	qint64 diameter;
@@ -22,7 +22,7 @@ protected:
 	bool with_length_and_diameter = false;
 
 signals:
-	void dm(int d);
+	void hasMeasured(MeasuredData data);
 
 };
 
