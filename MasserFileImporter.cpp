@@ -1,4 +1,4 @@
-#include "MasserFileImporter.h"
+ï»¿#include "MasserFileImporter.h"
 
 const char* MasserFileImporter::species[] = {
 	"Fichte",
@@ -7,8 +7,8 @@ const char* MasserFileImporter::species[] = {
 	"Fichte/Tanne",
 	"Fichte/Tanne/Douglasie",
 	"Kiefer",
-	"Lärche",
-	"Kiefer/Lärche",
+	"LÃ¤rche",
+	"Kiefer/LÃ¤rche",
 	"Kiefer/sNb",
 	"sNb",
 	"Buche",

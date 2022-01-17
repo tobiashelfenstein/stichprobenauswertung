@@ -1,5 +1,8 @@
 ﻿#include "BluetoothProgressDialog.h"
 
+#include <iostream>
+#include <QApplication>
+
 
 BluetoothProgressDialog::BluetoothProgressDialog() : QDialog()
 {
@@ -43,6 +46,15 @@ void BluetoothProgressDialog::setupUi()
 	button_layout->addWidget(btn_import_finish);
 
 	connect(btn_import_finish, &QPushButton::clicked, this, &BluetoothProgressDialog::accept);
+
+	return;
+}
+
+void BluetoothProgressDialog::successfulSendToHep(MeasuredData data)
+{
+	QApplication::beep();
+
+	
 
 	return;
 }

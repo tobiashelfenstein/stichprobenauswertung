@@ -64,6 +64,8 @@ void MainWindow::blueImportAction()
 	this->model->initializeImporter(HAGLOF, "\\\\.\\COM11", 9600);
 
 	BluetoothProgressDialog dlg_progress;
+	connect(this->model, &SampleModel::hasSuccessfulSendToHep, &dlg_progress, &BluetoothProgressDialog::successfulSendToHep);
+
 	dlg_progress.exec();
 
 	return;

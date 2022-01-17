@@ -1,4 +1,4 @@
-#include "AbstractImporter.h"
+﻿#include "AbstractImporter.h"
 #include "HaglofBluetoothImporter.h"
 
 #include <QtSerialPort/QSerialPort>
@@ -53,7 +53,7 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 			// parse diameter
 			if (this->diameter_measured)
 			{
-				std::cout << "Fehler: L�nge wurde erwartet!" << std::endl;
+				std::cout << "Fehler: Länge wurde erwartet!" << std::endl;
 				break;
 			}
 

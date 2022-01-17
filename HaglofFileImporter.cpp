@@ -1,4 +1,4 @@
-//#include "HaglofFileImporter.h"
+﻿//#include "HaglofFileImporter.h"
 //
 //#import <msxml3.dll>
 //

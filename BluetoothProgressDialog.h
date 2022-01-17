@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QVBoxLayout>
@@ -8,6 +8,8 @@
 #include <QtCore/QSize>
 #include <QtWidgets/QPushButton>
 #include <QString>
+
+#include "AbstractImporter.h"
 
 
 class BluetoothProgressDialog : public QDialog
@@ -19,5 +21,8 @@ public:
 	~BluetoothProgressDialog();
 
 	void setupUi();
+
+public slots:
+	void successfulSendToHep(MeasuredData data);
 };
 

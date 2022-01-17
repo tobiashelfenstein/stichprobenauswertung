@@ -1,4 +1,4 @@
-#include "HEPAutomator.h"
+﻿#include "HEPAutomator.h"
 
 HEPAutomator::HEPAutomator()
 {
@@ -52,27 +52,26 @@ BOOL CALLBACK HEPAutomator::findHEPVisibleWindow(HWND handle, LPARAM lparam)
 	return TRUE;
 }
 
-bool HEPAutomator::sendMeasuredValues(int num)
+bool HEPAutomator::sendMeasuredValues(std::string send_string)
 {
-	std::cout << num << std::endl;
-	// split number into digits
-	std::vector<int> digits;
-	while (num > 0)
-	{
-		digits.push_back(num % 10);
-		num /= 10;
-	}
-
 	// keyboard inputs
 	std::vector<INPUT> inputs;
 	INPUT ip = { 0 };
 	ip.type = INPUT_KEYBOARD;
 
-	for (std::vector<int>::reverse_iterator i = digits.rbegin(); i != digits.rend(); i++)
+	for (int i = 0; i < send_string.length(); i++)
 	{
 		// key down event for data
 		ip.ki.dwFlags = 0;
-		ip.ki.wVk = '0' + *i;
+		ip.ki.wVk = (send_string.at(i) == '.') ? VK_OEM_PERIOD : '0' + send_string.at(i);
+		//if (send_string.at(i) == '.')
+		//{
+		//	ip.ki.wVk = VK_OEM_PERIOD;
+		//}
+		//else
+		//{
+		//	ip.ki.wVk = '0' + send_string.at(i);
+		//}
 		inputs.push_back(ip);
 
 		// key up event for data
@@ -91,5 +90,5 @@ bool HEPAutomator::sendMeasuredValues(int num)
 
 	SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 
-	return TRUE;
+	return true;
 }
