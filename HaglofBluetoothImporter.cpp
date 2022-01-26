@@ -89,52 +89,6 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 		
 	}
 
-	//for (int i = 0; i < data->size(); i++)
-	//{
-		//if (data->left(5).compare("$PHGF") == 0)
-		//{
-		//	nmea_fields = data->split(',');
-		//	std::cout << nmea_fields[3].toStdString() << std::endl;
-		//	switch (nmea_fields[1].at(0))
-		//	{
-		//	case 'D':
-		//		// parse diameter
-		//		if (this->diameter_measured)
-		//		{
-		//			std::cout << "Fehler: Länge wurde erwartet!" << std::endl;
-		//			break;
-		//		}
-
-		//		this->diameter = floor(nmea_fields[3].toInt() / 10);
-		//		this->diameter_measured = true;
-
-		//		emit measured();
-
-		//		break;
-
-		//	case 'L':
-		//		// parse length
-		//		if (!this->with_length_and_diameter || this->length_measured)
-		//		{
-		//			std::cout << "Fehler: Durchmesser wurde erwartet!" << std::endl;
-		//			break;
-		//		}
-
-		//		this->length = nmea_fields[3].toFloat() / 10;
-		//		this->length_measured = true;
-
-		//		emit measured();
-
-		//		break;
-
-		//	default:
-		//		// kann eventuell weggelassen werden
-		//		break;
-		//	}
-		//}
-
-	//}
-
 	return;
 }
 

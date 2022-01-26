@@ -69,12 +69,12 @@ void MainWindow::blueImportAction()
 	QMessageBox msg_box;
 	msg_box.setWindowTitle("Stichprobenauswertung");
 	msg_box.setIcon(QMessageBox::Question);
-	msg_box.setText("Länge und Durchmesser übertragen?");
+	msg_box.setText("Nur Durchmesser übertragen?");
 	msg_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-	msg_box.setDefaultButton(QMessageBox::NoButton);
+	msg_box.setDefaultButton(QMessageBox::Yes);
 
 	bool with_length_and_diameter = false;
-	if (msg_box.exec() == QMessageBox::Yes)
+	if (msg_box.exec() == QMessageBox::No)
 	{
 		with_length_and_diameter = true;
 	}
