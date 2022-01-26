@@ -1,7 +1,7 @@
 ﻿#include "BluetoothProgressDialog.h"
 
 #include <iostream>
-#include <QApplication>
+#include <Windows.h>
 
 
 BluetoothProgressDialog::BluetoothProgressDialog() : QDialog()
@@ -52,7 +52,11 @@ void BluetoothProgressDialog::setupUi()
 
 void BluetoothProgressDialog::successfulSendToHep(MeasuredData data)
 {
-	QApplication::beep();
+	Beep(2200, 500);
+
+	/*Beep(2000, 500);
+	Sleep(10);
+	Beep(2000, 3000);*/
 
 	
 

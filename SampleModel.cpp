@@ -11,9 +11,10 @@ SampleModel::~SampleModel()
 	// nothing to do
 }
 
-void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate)
+void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate, bool with_length_and_diameter)
 {
 	this->manufacturer = m;
+	this->with_length_and_diameter = with_length_and_diameter;
 
 	switch (this->manufacturer)
 	{
@@ -26,6 +27,7 @@ void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate)
 		// manufacturer is haglöf
 		// open connection to serial port
 		this->importer = new HaglofBluetoothImporter();
+		this->importer->setLengthMeasurement(this->with_length_and_diameter);
 		this->importer->open(port, rate);
 
 		// connect to importer events

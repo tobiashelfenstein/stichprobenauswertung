@@ -17,6 +17,7 @@ public:
 	AbstractImporter() {}
 	virtual ~AbstractImporter() {}
 	virtual void open(QString port, qint64 rate) = 0;
+	void setLengthMeasurement(bool with_length_and_diameter);
 
 protected:
 	bool with_length_and_diameter = false;

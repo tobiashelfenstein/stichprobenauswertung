@@ -56,6 +56,9 @@
     <ClCompile Include="AbstractImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BluetoothDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HaglofFileImporter.h">
@@ -95,6 +98,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="HaglofBluetoothImporter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="BluetoothDevice.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

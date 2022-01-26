@@ -10,8 +10,18 @@ $PHGF,SPC,1,1 Fi SB,*67\r\n'
 $PHGF,DIA,M,269,*25\r\n'
 $PHGF,SPC,1,1 Fi SB,*67\r\n'
 $PHGF,DIA,M,129,*22\r\n'
+$PHGF,LEN,M,193,*28\r\n'
+test1
+test2
+test3
+test4
+$PHGF,test5
+$test6
 
 b''
 b'$PHGF,LEN,M,193,*28\r\n'
+
+b'$PHGF,SPC,1,1 Fi SB,*67
+b'$PHGF,DIA,M,345,*2A
 
 

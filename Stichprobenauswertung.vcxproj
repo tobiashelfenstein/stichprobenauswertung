@@ -32,7 +32,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.12.11_msvc2017_64</QtInstall>
-    <QtModules>gui;widgets;serialport;</QtModules>
+    <QtModules>gui;widgets;bluetooth;serialport;</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -93,6 +93,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbstractImporter.cpp" />
+    <ClCompile Include="BluetoothDevice.cpp" />
     <ClCompile Include="BluetoothProgressDialog.cpp" />
     <ClCompile Include="HaglofBluetoothImporter.cpp" />
     <ClCompile Include="HaglofFileImporter.cpp" />
@@ -107,6 +108,7 @@
     <QtMoc Include="HaglofBluetoothImporter.h" />
     <QtMoc Include="BluetoothProgressDialog.h" />
     <QtMoc Include="AbstractImporter.h" />
+    <QtMoc Include="BluetoothDevice.h" />
     <ClInclude Include="HaglofFileImporter.h" />
     <ClInclude Include="HEPAutomator.h" />
     <QtMoc Include="MainWindow.h" />

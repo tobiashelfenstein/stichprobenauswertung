@@ -3,6 +3,9 @@
 #include "HaglofBluetoothImporter.h"
 
 #include <iostream>
+#include <QMessagebox>
+
+#include "BluetoothDevice.h"
 
 
 MainWindow::MainWindow() : QMainWindow()
@@ -61,12 +64,29 @@ void MainWindow::blueImportAction()
 	// port selecion; baud selection
 	// lenth and diameter selection
 
-	this->model->initializeImporter(HAGLOF, "\\\\.\\COM11", 9600);
+	// ask for length and diameter measuring
+	qint64 msg_ret = 0;
+	QMessageBox msg_box;
+	msg_box.setWindowTitle("Stichprobenauswertung");
+	msg_box.setIcon(QMessageBox::Question);
+	msg_box.setText("Länge und Durchmesser übertragen?");
+	msg_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+	msg_box.setDefaultButton(QMessageBox::NoButton);
+
+	bool with_length_and_diameter = false;
+	if (msg_box.exec() == QMessageBox::Yes)
+	{
+		with_length_and_diameter = true;
+	}
+
+	this->model->initializeImporter(HAGLOF, "\\\\.\\COM8", 9600, with_length_and_diameter);
 
 	BluetoothProgressDialog dlg_progress;
 	connect(this->model, &SampleModel::hasSuccessfulSendToHep, &dlg_progress, &BluetoothProgressDialog::successfulSendToHep);
 
 	dlg_progress.exec();
+
+	
 
 	return;
 }

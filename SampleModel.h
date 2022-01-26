@@ -30,7 +30,7 @@ public:
 	~SampleModel();
 
 	void initializeImporter(MANUFACTURERS m); // for files
-	void initializeImporter(MANUFACTURERS m, QString port, qint64 rate); // for bluetooth
+	void initializeImporter(MANUFACTURERS m, QString port, qint64 rate, bool with_length_and_diameter = false); // for bluetooth
 
 
 private:
