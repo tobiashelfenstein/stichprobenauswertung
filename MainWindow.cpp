@@ -5,8 +5,6 @@
 #include <iostream>
 #include <QMessagebox>
 
-#include "BluetoothDevice.h"
-
 
 MainWindow::MainWindow() : QMainWindow()
 {

@@ -32,6 +32,11 @@ void HaglofBluetoothImporter::open(QString com_port, qint64 baud_rate)
 	return;
 }
 
+void HaglofBluetoothImporter::close()
+{
+
+}
+
 void HaglofBluetoothImporter::read()
 {
 	QByteArray data = this->bt_port->readAll();

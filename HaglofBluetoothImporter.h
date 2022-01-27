@@ -17,6 +17,7 @@ public:
 	~HaglofBluetoothImporter();
 
 	void open(QString port, qint64 rate);
+	void close();
 
 private:
 	QSerialPort* bt_port;

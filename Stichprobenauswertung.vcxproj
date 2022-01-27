@@ -93,7 +93,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbstractImporter.cpp" />
-    <ClCompile Include="BluetoothDevice.cpp" />
     <ClCompile Include="BluetoothProgressDialog.cpp" />
     <ClCompile Include="HaglofBluetoothImporter.cpp" />
     <ClCompile Include="HaglofFileImporter.cpp" />
@@ -108,7 +107,6 @@
     <QtMoc Include="HaglofBluetoothImporter.h" />
     <QtMoc Include="BluetoothProgressDialog.h" />
     <QtMoc Include="AbstractImporter.h" />
-    <QtMoc Include="BluetoothDevice.h" />
     <ClInclude Include="HaglofFileImporter.h" />
     <ClInclude Include="HEPAutomator.h" />
     <QtMoc Include="MainWindow.h" />
@@ -127,6 +125,9 @@
     <None Include="resources\icons\application-menu.svg" />
     <None Include="resources\icons\application-next.svg" />
     <None Include="resources\icons\input-warning.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="icons.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

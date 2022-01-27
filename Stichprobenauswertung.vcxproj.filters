@@ -56,9 +56,6 @@
     <ClCompile Include="AbstractImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BluetoothDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HaglofFileImporter.h">
@@ -100,9 +97,6 @@
     <QtMoc Include="HaglofBluetoothImporter.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="BluetoothDevice.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\icons\input-warning.svg">
@@ -120,5 +114,10 @@
     <None Include="resources\icons\application-next.svg">
       <Filter>Resource Files\icons</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="icons.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

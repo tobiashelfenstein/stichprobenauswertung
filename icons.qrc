@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="application-abort.svg">resources/icons/application-abort.svg</file>
+        <file alias="application-back.svg">resources/icons/application-back.svg</file>
+        <file alias="application-menu.svg">resources/icons/application-menu.svg</file>
+        <file alias="application-next.svg">resources/icons/application-next.svg</file>
+        <file alias="input-warning.svg">resources/icons/input-warning.svg</file>
+    </qresource>
+</RCC>
