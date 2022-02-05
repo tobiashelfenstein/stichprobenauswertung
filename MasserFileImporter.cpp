@@ -1,4 +1,7 @@
-﻿#include "MasserFileImporter.h"
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#include "MasserFileImporter.h"
 
 const char* MasserFileImporter::species[] = {
 	"Fichte",

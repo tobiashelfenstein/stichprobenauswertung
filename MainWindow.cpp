@@ -1,4 +1,7 @@
-﻿#include "MainWindow.h"
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#include "MainWindow.h"
 #include "BluetoothProgressDialog.h"
 #include "HaglofBluetoothImporter.h"
 
@@ -32,6 +35,9 @@ void MainWindow::setupUi()
 	// file import button
 	QPushButton *btn_file_import = new QPushButton("Stichprobe einlesen");
 	btn_file_import->setMinimumHeight(60);
+
+	connect(btn_file_import, &QPushButton::clicked, this, &MainWindow::fileImportAction);
+
 	layout->addWidget(btn_file_import);
 
 	// bluetooth import button
@@ -85,6 +91,13 @@ void MainWindow::blueImportAction()
 	dlg_progress.exec();
 
 	
+
+	return;
+}
+
+void MainWindow::fileImportAction()
+{
+	this->model->initializeImporter(HAGLOF);
 
 	return;
 }

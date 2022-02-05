@@ -1,4 +1,8 @@
-﻿#include "SampleModel.h"
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#include "SampleModel.h"
+#include "HaglofFileImporter.h"
 #include "HaglofBluetoothImporter.h"
 
 SampleModel::SampleModel() : QObject()
@@ -9,6 +13,69 @@ SampleModel::SampleModel() : QObject()
 SampleModel::~SampleModel()
 {
 	// nothing to do
+}
+
+void SampleModel::initializeImporter(MANUFACTURERS m)
+{
+	this->manufacturer = m;
+
+	switch (this->manufacturer)
+	{
+	case MASSER:
+		// manufacture is masser
+
+		break;
+
+	case HAGLOF:
+		// manufacturer is haglöf
+		this->initializeDatabase();
+
+		break;
+	}
+
+	return;
+}
+
+bool SampleModel::initializeDatabase()
+{
+	//QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung_db");
+	//sample_db.setDatabaseName(":memory:");
+
+	QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung_db");
+	sample_db.setDatabaseName("sample.db");
+
+	if (!sample_db.open())
+	{
+		// throw exception
+	}
+
+	QSqlQuery sample_query(sample_db);
+
+	// create tables
+	// t_measuring for Kluppfall
+	if (!sample_query.exec("CREATE TABLE t_measuring (id INTEGER PRIMARY KEY, measuring INTEGER);"))
+	{
+		// throw exception
+	}
+
+	// t_species
+	if (!sample_query.exec("CREATE TABLE t_species (id INTEGER PRIMARY KEY, meausring INTEGER, species TEXT);"))
+	{
+		// throw execption
+	}
+
+	// t_trees
+	if (!sample_query.exec("CREATE TABLE t_trees (id INTEGER PRIMARY KEY, species INTEGER, length INTEGER, diameter INTEGER)"))
+	{
+		// throw exception
+	}
+
+	
+	this->importer = new HaglofFileImporter();
+	connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::saveToDatabase);
+	this->importer->open("Z:\\source\\repos\\Stichprobenauswertung_Qt\\Stichprobenauswertung\\examples\\kluppfall.xml");
+
+	return true;
 }
 
 void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate, bool with_length_and_diameter)
@@ -33,9 +100,6 @@ void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate,
 		// connect to importer events
 		connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::sendToHEP);
 
-		break;
-
-	default:
 		break;
 	}
 }
@@ -74,4 +138,16 @@ QString SampleModel::prepareSendString(MeasuredData data)
 	}
 
 	return send_string;
+}
+
+void SampleModel::saveToDatabase(MeasuredData data)
+{
+	QSqlQuery data_query(QSqlDatabase::database("stichprobenauswertung_db"));
+	QString query("INSERT INTO t_trees (id, species, length, diameter) VALUES (0, 0 ," + QString::number(data.length) + "," + QString::number(data.diameter) + ")");
+	std::cout << query.toStdString() << std::endl;
+	//data_query.prepare("INSERT INTO t_trees (id, species, length, diameter) VALUES (0, " + data.species + "," + data.length + "," + data.diameter + ")");
+	data_query.prepare(query);
+	data_query.exec();
+
+	return;
 }

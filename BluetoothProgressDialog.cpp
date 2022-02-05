@@ -1,4 +1,7 @@
-﻿#include "BluetoothProgressDialog.h"
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#include "BluetoothProgressDialog.h"
 
 #include <iostream>
 #include <Windows.h>

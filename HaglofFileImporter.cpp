@@ -1,68 +1,105 @@
-﻿//#include "HaglofFileImporter.h"
-//
-//#import <msxml3.dll>
-//
-//
-//
-//HaglofFileImporter::HaglofFileImporter()
-//{
-//	// nothing to do
-//}
-//
-//HaglofFileImporter::~HaglofFileImporter()
-//{
-//	// nothing to do
-//}
-//
-//bool HaglofFileImporter::importXMLFile(char *filename)
-//{
-//	CoInitializeEx(NULL, COINIT_SPEED_OVER_MEMORY);
-//
-//	this->pXMLDoc.CreateInstance(__uuidof(DOMDocument));
-//	this->pXMLDoc->async = VARIANT_FALSE;
-//	this->pXMLDoc->validateOnParse = VARIANT_TRUE;
-//
-//	this->pXMLDoc->load(filename);
-//	this->pXMLDoc->setProperty("SelectionLanguage", "XPath");
-//
-//	return TRUE;
-//}
-//
-//bool HaglofFileImporter::readAll()
-//{
-//	IXMLDOMNodeListPtr pTrees = nullptr;
-//	IXMLDOMNodePtr pTree = nullptr;
-//
-//	HaglofData entry;
-//
-//	pTrees = this->pXMLDoc->selectNodes("/MDIIDATA/Data/Tree");
-//
-//	long numTrees = 0;
-//	pTrees->get_length(&numTrees);
-//	for (long i = 0; i < numTrees; i++)
-//	{
-//		//entry is not empty
-//		pTrees->get_item(i, &pTree);
-//
-//		// ist wtol sicher und gut?!
-//		entry.species = this->readMeasuredData(pTree, bstr_t("SpeciesText"));
-//		entry.diameter = _wtol(this->readMeasuredData(pTree, bstr_t("Diameter")));
-//		entry.height1 = _wtol(this->readMeasuredData(pTree, bstr_t("Height1")));
-//
-//		this->measuredData.push_back(entry);
-//	}
-//
-//	return TRUE;
-//}
-//
-//// TODO: Verbesserung Pointer to Pointer = **node; Speicherverwaltung
-//BSTR HaglofFileImporter::readMeasuredData(IXMLDOMNode *node, bstr_t queryString)
-//{
-//	IXMLDOMNodePtr pData = nullptr;
-//	BSTR value;
-//
-//	node->selectSingleNode(queryString, &pData);
-//	pData->get_text(&value);
-//
-//	return value;
-//}
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#include "HaglofFileImporter.h"
+
+
+
+HaglofFileImporter::HaglofFileImporter() : AbstractImporter()
+{
+	// nothing to do
+}
+
+HaglofFileImporter::~HaglofFileImporter()
+{
+	// nothing to do
+}
+
+void HaglofFileImporter::open(const char *filename)
+{
+	QFile xmlfile(filename);
+	xmlfile.open(QFile::ReadOnly);
+
+	this->xml.setDevice(&xmlfile);
+	this->readAll();
+
+	return;
+}
+
+bool HaglofFileImporter::readAll()
+{
+	MeasuredData entry;
+
+	if (this->xml.readNextStartElement())
+	{
+		if (this->xml.name() == QString("MDIIDATA"))
+		{
+			this->readHaglofData();
+		}
+		else
+		{
+			this->xml.raiseError("Keine Kluppendatei von HAGLÖF!");
+		}
+	}
+
+
+	return TRUE;
+}
+
+void HaglofFileImporter::readHaglofData()
+{
+	while (this->xml.readNextStartElement())
+	{
+		if (this->xml.name() == QString("Data"))
+			this->readHgData();
+		else
+			this->xml.skipCurrentElement();
+	}
+}
+
+void HaglofFileImporter::readHgData()
+{
+	while (this->xml.readNextStartElement())
+	{
+		if (this->xml.name() == QString("Tree"))
+			this->readTree();
+		else
+			this->xml.skipCurrentElement();
+	}
+}
+
+void HaglofFileImporter::readTree()
+{
+	QString result;
+	MeasuredData entry;
+
+	while (this->xml.readNextStartElement())
+	{
+		result = "";
+
+		if (this->xml.name() == QString("SpeciesText"))
+		{
+			result = this->xml.readElementText();
+			entry.species = result.trimmed();
+		}
+		else if (this->xml.name() == QString("Diameter"))
+		{
+			result = this->xml.readElementText();
+			entry.diameter = floor(result.trimmed().toInt()/ 10);
+		}
+		else if (this->xml.name() == QString("Height1"))
+		{
+			result = this->xml.readElementText();
+			entry.length = result.trimmed().toFloat() / 10;
+		}
+		else
+		{
+			this->xml.skipCurrentElement();
+		}
+
+	}
+
+	this->hasMeasured(entry);
+
+	return;
+}

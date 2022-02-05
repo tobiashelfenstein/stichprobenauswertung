@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#pragma once
 
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QVBoxLayout>
@@ -21,6 +24,7 @@ public:
 
 public slots:
 	void blueImportAction();
+	void fileImportAction();
 
 private:
 	SampleModel* model;

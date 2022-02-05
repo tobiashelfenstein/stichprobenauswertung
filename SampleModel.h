@@ -1,8 +1,13 @@
-﻿#pragma once
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#pragma once
 
 #include "HEPAutomator.h"
 #include "AbstractImporter.h"
 #include <QObject>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
 
 //struct MeasuredData
 //{
@@ -39,7 +44,11 @@ private:
 	AbstractImporter* importer = nullptr;
 	bool with_length_and_diameter = false;
 
+	QSqlDatabase* sample_db = nullptr;
+
 	QString prepareSendString(MeasuredData data);
+	void saveToDatabase(MeasuredData data);
+	bool initializeDatabase();
 
 public slots:
 	void sendToHEP(MeasuredData data);

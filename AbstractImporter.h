@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+// Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
+
+#pragma once
 
 #include <QObject>
 
@@ -16,7 +19,8 @@ class AbstractImporter : public QObject
 public:
 	AbstractImporter() {}
 	virtual ~AbstractImporter() {}
-	virtual void open(QString port, qint64 rate) = 0;
+	virtual void open(const char* filename) {};
+	virtual void open(QString port, qint64 rate) {};
 	void setLengthMeasurement(bool with_length_and_diameter);
 
 protected:
