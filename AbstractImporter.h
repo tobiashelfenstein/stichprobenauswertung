@@ -27,6 +27,7 @@ protected:
 	bool with_length_and_diameter = false;
 
 signals:
+	void changeMeasuring(QString measuring);
 	void hasMeasured(MeasuredData data);
 
 };

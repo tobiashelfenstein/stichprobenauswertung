@@ -97,7 +97,9 @@ void MainWindow::blueImportAction()
 
 void MainWindow::fileImportAction()
 {
-	this->model->initializeImporter(HAGLOF);
+	//this->model->initializeImporter(HAGLOF);
+	this->model->initializeImporter(MASSER);
+	this->model->getMeasuring();
 
 	return;
 }

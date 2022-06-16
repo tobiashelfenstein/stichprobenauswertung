@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="AbstractImporter.cpp" />
     <ClCompile Include="BluetoothProgressDialog.cpp" />
+    <ClCompile Include="SampleDatabase.cpp" />
     <ClCompile Include="HaglofBluetoothImporter.cpp" />
     <ClCompile Include="HaglofFileImporter.cpp" />
     <ClCompile Include="HEPAutomator.cpp" />
@@ -108,9 +109,10 @@
     <QtMoc Include="BluetoothProgressDialog.h" />
     <QtMoc Include="AbstractImporter.h" />
     <QtMoc Include="HaglofFileImporter.h" />
+    <QtMoc Include="SampleDatabase.h" />
     <ClInclude Include="HEPAutomator.h" />
     <QtMoc Include="MainWindow.h" />
-    <ClInclude Include="MasserFileImporter.h" />
+    <QtMoc Include="MasserFileImporter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="examples\kluppfall.txt" />

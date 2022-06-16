@@ -8,6 +8,9 @@
 #include <QObject>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
+#include <QVariant>
+#include "SampleDatabase.h"
+#include <QStringList>
 
 //struct MeasuredData
 //{
@@ -36,7 +39,7 @@ public:
 
 	void initializeImporter(MANUFACTURERS m); // for files
 	void initializeImporter(MANUFACTURERS m, QString port, qint64 rate, bool with_length_and_diameter = false); // for bluetooth
-
+	QStringList getMeasuring();
 
 private:
 	HEPAutomator* automator;
@@ -44,10 +47,13 @@ private:
 	AbstractImporter* importer = nullptr;
 	bool with_length_and_diameter = false;
 
-	QSqlDatabase* sample_db = nullptr;
+	qint64 measuring_id = 0; // current measuring id
+
+	SampleDatabase* sample_db = nullptr;
 
 	QString prepareSendString(MeasuredData data);
 	void saveToDatabase(MeasuredData data);
+	void setMeasuring(QString measuring);
 	bool initializeDatabase();
 
 public slots:

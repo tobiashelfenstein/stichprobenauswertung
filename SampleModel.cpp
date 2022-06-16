@@ -4,6 +4,8 @@
 #include "SampleModel.h"
 #include "HaglofFileImporter.h"
 #include "HaglofBluetoothImporter.h"
+#include "MasserFileImporter.h"
+
 
 SampleModel::SampleModel() : QObject()
 {
@@ -19,61 +21,32 @@ void SampleModel::initializeImporter(MANUFACTURERS m)
 {
 	this->manufacturer = m;
 
+	this->initializeDatabase();
+
 	switch (this->manufacturer)
 	{
 	case MASSER:
 		// manufacture is masser
-
+		this->importer = new MasserFileImporter();
 		break;
 
 	case HAGLOF:
 		// manufacturer is haglöf
-		this->initializeDatabase();
-
+		this->importer = new HaglofFileImporter();
 		break;
 	}
+
+	connect(this->importer, &AbstractImporter::changeMeasuring, this, &SampleModel::setMeasuring);
+	connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::saveToDatabase);
+
+	this->importer->open("Z:\\source\\repos\\Stichprobenauswertung_Qt\\Stichprobenauswertung\\examples\\kluppfall.txt");
 
 	return;
 }
 
 bool SampleModel::initializeDatabase()
 {
-	//QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung_db");
-	//sample_db.setDatabaseName(":memory:");
-
-	QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung_db");
-	sample_db.setDatabaseName("sample.db");
-
-	if (!sample_db.open())
-	{
-		// throw exception
-	}
-
-	QSqlQuery sample_query(sample_db);
-
-	// create tables
-	// t_measuring for Kluppfall
-	if (!sample_query.exec("CREATE TABLE t_measuring (id INTEGER PRIMARY KEY, measuring INTEGER);"))
-	{
-		// throw exception
-	}
-
-	// t_species
-	if (!sample_query.exec("CREATE TABLE t_species (id INTEGER PRIMARY KEY, meausring INTEGER, species TEXT);"))
-	{
-		// throw execption
-	}
-
-	// t_trees
-	if (!sample_query.exec("CREATE TABLE t_trees (id INTEGER PRIMARY KEY, species INTEGER, length INTEGER, diameter INTEGER)"))
-	{
-		// throw exception
-	}
-
-	
-	this->importer = new HaglofFileImporter();
-	connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::saveToDatabase);
-	this->importer->open("Z:\\source\\repos\\Stichprobenauswertung_Qt\\Stichprobenauswertung\\examples\\kluppfall.xml");
+	this->sample_db = new SampleDatabase();
 
 	return true;
 }
@@ -140,14 +113,26 @@ QString SampleModel::prepareSendString(MeasuredData data)
 	return send_string;
 }
 
-void SampleModel::saveToDatabase(MeasuredData data)
+void SampleModel::setMeasuring(QString measuring)
 {
-	QSqlQuery data_query(QSqlDatabase::database("stichprobenauswertung_db"));
-	QString query("INSERT INTO t_trees (id, species, length, diameter) VALUES (0, 0 ," + QString::number(data.length) + "," + QString::number(data.diameter) + ")");
-	std::cout << query.toStdString() << std::endl;
-	//data_query.prepare("INSERT INTO t_trees (id, species, length, diameter) VALUES (0, " + data.species + "," + data.length + "," + data.diameter + ")");
-	data_query.prepare(query);
-	data_query.exec();
+	this->measuring_id = this->sample_db->setMeasuringProcess(measuring);
 
 	return;
 }
+
+QStringList SampleModel::getMeasuring()
+{
+	QStringList test = this->sample_db->getSpeciesByName();
+	for (int i = 0; i < test.size(); i++)
+		std::cout << test.at(i).toLocal8Bit().constData() << std::endl;
+
+	return QStringList();
+}
+
+void SampleModel::saveToDatabase(MeasuredData data)
+{
+	this->sample_db->setMeasuredData(this->measuring_id, data);
+
+	return;
+}
+

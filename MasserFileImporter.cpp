@@ -37,42 +37,51 @@ MasserFileImporter::~MasserFileImporter()
 	// nothing to do
 }
 
-bool MasserFileImporter::importTXTFile(char *filename)
+void MasserFileImporter::open(const char* filename)
 {
-	ifstream txtFile(filename);
-	string buffer;
+	QFile txtfile(filename);
+	txtfile.open(QFile::ReadOnly);
+
+	//ifstream txtFile(filename);
 
 	string species, diameter;
 
-	MasserData entry;
+	MeasuredData entry;
 
-	while (getline(txtFile, buffer))
+	QTextStream stream(&txtfile);
+	while (!stream.atEnd())
 	{
+		QString buffer = stream.readLine();
+
 		// entry is not empty
 
-		switch (buffer.front())
+		switch (buffer.front().toLatin1())
 		{
 
 		// parse data header
 		case 'P':
+			// create current measuring
+			// MASSER with 4 digit long measuring identifier
+			this->changeMeasuring(buffer.mid(5, 4));
 			break;
 
 		// parse only BHD data
 		case 'B':
 			entry.species = this->parseSpecies(&buffer);
 			entry.diameter = this->parseDiameter(&buffer);
-			entry.height1 = 0; // always 0
+			entry.length = 0; // always 0
 
-			this->measuredData.push_back(entry);
+			this->hasMeasured(entry);
 			break;
 
 		// parse BHD and height data
+		// not useful
 		case 'H':
-			entry.species = this->parseSpecies(&buffer);
-			entry.diameter = this->parseDiameter(&buffer);
-			entry.height1 = this->parseHeight(&buffer);
+			//entry.species = this->parseSpecies(&buffer);
+			//entry.diameter = this->parseDiameter(&buffer);
+			//entry.height1 = this->parseHeight(&buffer);
 
-			this->measuredData.push_back(entry);
+			//this->measuredData.push_back(entry);
 			break;
 
 		default:
@@ -82,23 +91,23 @@ bool MasserFileImporter::importTXTFile(char *filename)
 
 	}
 
-	txtFile.close();
+	txtfile.close();
 
-	return TRUE;
+	return;
 }
 
-string MasserFileImporter::parseSpecies(string *buffer)
+QString MasserFileImporter::parseSpecies(QString *buffer)
 {
-	string species;
-	species = MasserFileImporter::species[stoi(buffer->substr(1, 2)) - 1];
+	QString species;
+	species = MasserFileImporter::species[buffer->mid(1, 2).toInt() - 1];
 
 	return species;
 }
 
-int MasserFileImporter::parseDiameter(string* buffer)
+int MasserFileImporter::parseDiameter(QString* buffer)
 {
 	int diameter;
-	diameter = floor(stol(buffer->substr(3, 3)) / 10);
+	diameter = floor(buffer->mid(3, 3).toInt() / 10);
 
 	return diameter;
 }

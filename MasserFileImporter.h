@@ -8,30 +8,27 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include "AbstractImporter.h"
+#include <QFile>
+#include <QTextStream>
 
 using namespace std;
 
-struct MasserData
+class MasserFileImporter : public AbstractImporter
 {
-	string species;
-	int diameter;
-	int height1;
-};
+	Q_OBJECT
 
-class MasserFileImporter
-{
 	const static char* species[];
 
 private:
-	vector<MasserData> measuredData;
-	string parseSpecies(string *buffer);
-	int parseDiameter(string* buffer);
+	QString parseSpecies(QString *buffer);
+	int parseDiameter(QString* buffer);
 	int parseHeight(string* buffer);
 
 public:
 	MasserFileImporter();
 	~MasserFileImporter();
 
-	bool importTXTFile(char *filename);
+	void open(const char* filename);
 };
 

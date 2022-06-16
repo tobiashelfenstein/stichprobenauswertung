@@ -51,7 +51,14 @@ void HaglofFileImporter::readHaglofData()
 	while (this->xml.readNextStartElement())
 	{
 		if (this->xml.name() == QString("Data"))
+		{
+			// create current measuring
+			// HAGLOF always "0"
+			this->changeMeasuring("haglof");
+
+			// now begin reading tree entries
 			this->readHgData();
+		}
 		else
 			this->xml.skipCurrentElement();
 	}
