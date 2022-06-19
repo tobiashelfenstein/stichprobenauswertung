@@ -37,13 +37,13 @@ public:
 	SampleModel();
 	~SampleModel();
 
-	void initializeImporter(MANUFACTURERS m); // for files
-	void initializeImporter(MANUFACTURERS m, QString port, qint64 rate, bool with_length_and_diameter = false); // for bluetooth
+	void initializeImporter(qint64 manufacturer, const char* filename); // for files
+	void initializeImporter(qint64 manufacturer, QString port, qint64 rate, bool with_length_and_diameter = false); // for bluetooth
 	QStringList getMeasuring();
 
 private:
 	HEPAutomator* automator;
-	MANUFACTURERS manufacturer;
+	qint64 manufacturer;
 	AbstractImporter* importer = nullptr;
 	bool with_length_and_diameter = false;
 

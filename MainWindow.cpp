@@ -4,9 +4,12 @@
 #include "MainWindow.h"
 #include "BluetoothProgressDialog.h"
 #include "HaglofBluetoothImporter.h"
+#include "FileImportDialog.h"
+#include "SourceSelector.h"
 
 #include <iostream>
 #include <QMessagebox>
+#include <QtWidgets/QDialog>
 
 
 MainWindow::MainWindow() : QMainWindow()
@@ -98,8 +101,22 @@ void MainWindow::blueImportAction()
 void MainWindow::fileImportAction()
 {
 	//this->model->initializeImporter(HAGLOF);
-	this->model->initializeImporter(MASSER);
-	this->model->getMeasuring();
+	//this->model->initializeImporter(MASSER);
+	//this->model->getMeasuring();
+
+	FileImportDialog dlg_file_import; // TODO besser zeiger oder direkte Instanz
+	if (dlg_file_import.exec() == QDialog::Accepted)
+	{
+		this->model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toLatin1().constData());
+		//this->model->getMeasuring();
+	}
+
+	SourceSelector dlg_source_selector;
+
+	if (dlg_source_selector.exec() == QDialog::Accepted)
+	{
+		std::cout << "läuft" << std::endl;
+	}
 
 	return;
 }

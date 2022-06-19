@@ -6,11 +6,11 @@
 
 SampleDatabase::SampleDatabase() : QObject()
 {
-	//QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung");
-	//sample_db.setDatabaseName(":memory:");
-
 	QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung");
-	sample_db.setDatabaseName("sample.db");
+	sample_db.setDatabaseName(":memory:");
+
+	//QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung");
+	//sample_db.setDatabaseName("sample.db");
 
 	if (!sample_db.open())
 	{

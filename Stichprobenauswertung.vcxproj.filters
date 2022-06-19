@@ -59,6 +59,12 @@
     <ClCompile Include="SampleDatabase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileImportDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceSelector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HEPAutomator.h">
@@ -101,6 +107,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="MasserFileImporter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="FileImportDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SourceSelector.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

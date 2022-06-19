@@ -94,6 +94,12 @@
   <ItemGroup>
     <ClCompile Include="AbstractImporter.cpp" />
     <ClCompile Include="BluetoothProgressDialog.cpp" />
+    <ClCompile Include="FileImportDialog.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="SampleDatabase.cpp" />
     <ClCompile Include="HaglofBluetoothImporter.cpp" />
     <ClCompile Include="HaglofFileImporter.cpp" />
@@ -102,14 +108,17 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MasserFileImporter.cpp" />
     <ClCompile Include="SampleModel.cpp" />
+    <ClCompile Include="SourceSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="SourceSelector.h" />
     <QtMoc Include="SampleModel.h" />
     <QtMoc Include="HaglofBluetoothImporter.h" />
     <QtMoc Include="BluetoothProgressDialog.h" />
     <QtMoc Include="AbstractImporter.h" />
     <QtMoc Include="HaglofFileImporter.h" />
     <QtMoc Include="SampleDatabase.h" />
+    <QtMoc Include="FileImportDialog.h" />
     <ClInclude Include="HEPAutomator.h" />
     <QtMoc Include="MainWindow.h" />
     <QtMoc Include="MasserFileImporter.h" />

@@ -10,6 +10,7 @@
 SampleModel::SampleModel() : QObject()
 {
 	this->automator = new HEPAutomator();
+	this->manufacturer = 0; // TODO, überprüfen, ob notwendig
 }
 
 SampleModel::~SampleModel()
@@ -17,9 +18,9 @@ SampleModel::~SampleModel()
 	// nothing to do
 }
 
-void SampleModel::initializeImporter(MANUFACTURERS m)
+void SampleModel::initializeImporter(qint64 manufacturer, const char* filename)
 {
-	this->manufacturer = m;
+	this->manufacturer = manufacturer;
 
 	this->initializeDatabase();
 
@@ -39,7 +40,7 @@ void SampleModel::initializeImporter(MANUFACTURERS m)
 	connect(this->importer, &AbstractImporter::changeMeasuring, this, &SampleModel::setMeasuring);
 	connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::saveToDatabase);
 
-	this->importer->open("Z:\\source\\repos\\Stichprobenauswertung_Qt\\Stichprobenauswertung\\examples\\kluppfall.txt");
+	this->importer->open(filename);
 
 	return;
 }
@@ -51,9 +52,9 @@ bool SampleModel::initializeDatabase()
 	return true;
 }
 
-void SampleModel::initializeImporter(MANUFACTURERS m, QString port, qint64 rate, bool with_length_and_diameter)
+void SampleModel::initializeImporter(qint64 manufacturer, QString port, qint64 rate, bool with_length_and_diameter)
 {
-	this->manufacturer = m;
+	this->manufacturer = manufacturer;
 	this->with_length_and_diameter = with_length_and_diameter;
 
 	switch (this->manufacturer)
