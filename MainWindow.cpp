@@ -112,10 +112,9 @@ void MainWindow::fileImportAction()
 	}
 
 	SourceSelector dlg_source_selector;
-
 	if (dlg_source_selector.exec() == QDialog::Accepted)
 	{
-		std::cout << "läuft" << std::endl;
+		this->model->readFromDatabase(dlg_source_selector.getMeasuring(), dlg_source_selector.getSpecies());
 	}
 
 	return;

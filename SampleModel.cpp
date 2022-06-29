@@ -137,3 +137,12 @@ void SampleModel::saveToDatabase(MeasuredData data)
 	return;
 }
 
+void SampleModel::readFromDatabase(QString measuring, QString species)
+{
+	connect(this->sample_db, &SampleDatabase::hasReadFromDatabase, this, &SampleModel::sendToHEP);
+
+	this->sample_db->getMeasuredData(measuring, species);
+
+	return;
+}
+

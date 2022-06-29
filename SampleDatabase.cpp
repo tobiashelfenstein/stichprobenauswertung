@@ -2,6 +2,7 @@
 // Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
 
 #include "SampleDatabase.h"
+#include <iostream>
 
 
 SampleDatabase::SampleDatabase() : QObject()
@@ -74,7 +75,7 @@ void SampleDatabase::setMeasuredData(qint64 measuring_id, MeasuredData data)
 
 	// check, if species is in database
 	// sid is species id
-	qint64 species_id = this->getExistingEntryById("t_species", "species", data.species);
+	qint64 species_id = this->getExistingSpeciesEntry(measuring_id, data.species);
 	if (species_id == 0)
 	{
 		// species is not in database
@@ -95,10 +96,50 @@ void SampleDatabase::setMeasuredData(qint64 measuring_id, MeasuredData data)
 	return;
 }
 
+void SampleDatabase::getMeasuredData(QString measuring, QString species)
+{
+	QSqlQuery query(QSqlDatabase::database("stichprobenauswertung"));
+
+	// check, if species is in database
+	// sid is species id
+	qint64 measuring_id = this->getExistingEntryById("t_measuring", "measuring", measuring);
+	qint64 species_id = this->getExistingSpeciesEntry(measuring_id, species);
+	if (species_id > 0)
+	{
+		query.exec("SELECT diameter, length FROM t_trees WHERE species = " + QString::number(species_id));
+		qint64 fld_diameter = query.record().indexOf("diameter");
+		qint64 fld_length = query.record().indexOf("length");
+
+		MeasuredData entry;
+		while (query.next())
+		{
+			entry.species = species;
+			entry.diameter = query.value(fld_diameter).toInt();
+			entry.length = query.value(fld_length).toInt();
+
+			emit hasReadFromDatabase(entry);
+		}
+	}
+
+	return;
+}
+
 qint64 SampleDatabase::getExistingEntryById(QString table, QString column, QString value)
 {
 	QSqlQuery query(QSqlDatabase::database("stichprobenauswertung"));
 	query.exec("SELECT rowid FROM " + table + " WHERE " + column + " = '" + value + "'");
+
+	qint64 id = 0;
+	if (query.next())
+		id = query.value(0).toInt();
+
+	return id;
+}
+
+qint64 SampleDatabase::getExistingSpeciesEntry(qint64 measuring_id, QString species)
+{
+	QSqlQuery query(QSqlDatabase::database("stichprobenauswertung"));
+	query.exec("SELECT rowid FROM t_species WHERE measuring = " + QString::number(measuring_id) + " AND species = '" + species + "'");
 
 	qint64 id = 0;
 	if (query.next())

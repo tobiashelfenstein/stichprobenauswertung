@@ -8,10 +8,15 @@
 #include <QtWidgets/QComboBox>
 #include <QMessagebox>
 
+#include <QSqlQueryModel>
+#include <QSqlDatabase>
+
 
 SourceSelector::SourceSelector() : QDialog()
 {
 	this->setupUi();
+
+	this->initializeFields();
 }
 
 SourceSelector::~SourceSelector()
@@ -33,7 +38,7 @@ void SourceSelector::setupUi()
 	this->measuring_cbx->setMinimumWidth(200);
 	// add items from database
 
-	//connect(this->device_cbx, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&FileImportDialog::updateFileList));
+	connect(this->measuring_cbx, &QComboBox::currentTextChanged, this, &SourceSelector::measuringUpdated);
 
 	layout->addWidget(measuring_lbl);
 	layout->addWidget(this->measuring_cbx);
@@ -76,4 +81,54 @@ void SourceSelector::setupUi()
 	layout_buttons->addWidget(btn_start_import);
 
 	return;
+}
+
+void SourceSelector::initializeFields()
+{
+	this->updateMeasuringComboBox();
+	this->updateSpeciesComboBox();
+	
+	return;
+}
+
+void SourceSelector::updateMeasuringComboBox()
+{
+	// measuring process combobox
+	QSqlQueryModel* m_measuring = new QSqlQueryModel();
+	m_measuring->setQuery("SELECT measuring FROM t_measuring", QSqlDatabase::database("stichprobenauswertung"));
+	this->measuring_cbx->setModel(m_measuring);
+
+	return;
+}
+
+void SourceSelector::updateSpeciesComboBox()
+{
+	QString str_measuring = this->measuring_cbx->currentText();
+	QSqlQueryModel m_measuring;
+
+	m_measuring.setQuery("SELECT rowid FROM t_measuring WHERE measuring = '" + str_measuring + "'", QSqlDatabase::database("stichprobenauswertung"));
+	qint64 int_measuring = m_measuring.data(m_measuring.index(0, 0)).toInt();
+
+	QSqlQueryModel* m_species = new QSqlQueryModel();
+	m_species->setQuery("SELECT species FROM t_species WHERE measuring = '" + QString::number(int_measuring) + "'", QSqlDatabase::database("stichprobenauswertung"));
+	this->species_cbx->setModel(m_species);
+
+	return;
+}
+
+void SourceSelector::measuringUpdated(const QString& text)
+{
+	this->updateSpeciesComboBox();
+
+	return;
+}
+
+QString SourceSelector::getSpecies()
+{
+	return this->species_cbx->currentText();
+}
+
+QString SourceSelector::getMeasuring()
+{
+	return this->measuring_cbx->currentText();
 }

@@ -22,8 +22,15 @@ public:
 	qint64 setMeasuringProcess(QString measuring);
 	void setMeasuredData(qint64 measuring_id, MeasuredData data);
 
+	void getMeasuredData(QString measuring, QString species);
+
+	qint64 getExistingSpeciesEntry(qint64 measuring_id, QString species);
+
 	QStringList getMeasuringByName();
 	QStringList getSpeciesByName();
+
+signals:
+	void hasReadFromDatabase(MeasuredData data);
 
 	
 

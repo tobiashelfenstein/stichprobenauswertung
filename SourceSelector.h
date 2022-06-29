@@ -33,14 +33,23 @@ public:
 	void getDeviceIndex();
 	QString getFilePath();
 
+	QString getSpecies();
+
+	QString getMeasuring();
+
 	QComboBox* measuring_cbx;
 	QComboBox* species_cbx;
 
 public slots:
+	void measuringUpdated(const QString& text);
 
 
 private:
 	QFileSystemModel* model;
 	QListView* file_lvw;
+
+	void initializeFields();
+	void updateMeasuringComboBox();
+	void updateSpeciesComboBox();
 };
 
