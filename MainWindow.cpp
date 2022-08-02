@@ -110,11 +110,19 @@ void MainWindow::fileImportAction()
 		this->model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toLatin1().constData());
 		//this->model->getMeasuring();
 	}
+	else // TODO
+	{
+		return;
+	}
 
 	SourceSelector dlg_source_selector;
 	if (dlg_source_selector.exec() == QDialog::Accepted)
 	{
 		this->model->readFromDatabase(dlg_source_selector.getMeasuring(), dlg_source_selector.getSpecies());
+	}
+	else // TODO
+	{
+		return;
 	}
 
 	return;

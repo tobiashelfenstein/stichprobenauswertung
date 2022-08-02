@@ -92,7 +92,8 @@ void FileImportDialog::updateFileList(int index)
 	filters << general.at(index).toLocal8Bit().constData();
 
 	this->model->setNameFilters(filters);
-	this->file_lvw->setRootIndex(this->model->setRootPath("examples"));
+	//this->file_lvw->setRootIndex(this->model->setRootPath("examples"));
+	this->file_lvw->setRootIndex(this->model->setRootPath("kluppdaten"));
 
 	return;
 }
