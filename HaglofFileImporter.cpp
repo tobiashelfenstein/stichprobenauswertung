@@ -32,7 +32,7 @@ bool HaglofFileImporter::readAll()
 
 	if (this->xml.readNextStartElement())
 	{
-		if (this->xml.name() == QString("MDIIDATA"))
+		if (QString("mdiidata").compare(this->xml.name(), Qt::CaseInsensitive) == 0)
 		{
 			this->readHaglofData();
 		}
@@ -50,7 +50,7 @@ void HaglofFileImporter::readHaglofData()
 {
 	while (this->xml.readNextStartElement())
 	{
-		if (this->xml.name() == QString("Data"))
+		if (QString("data").compare(this->xml.name(), Qt::CaseInsensitive) == 0)
 		{
 			// create current measuring
 			// HAGLOF always "0"

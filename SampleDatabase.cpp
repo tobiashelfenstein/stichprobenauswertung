@@ -7,6 +7,12 @@
 
 SampleDatabase::SampleDatabase() : QObject()
 {
+	// TODO
+	if (QSqlDatabase::database("stichprobenauswertung").isOpen())
+	{
+		QSqlDatabase::removeDatabase("stichprobenauswertung");
+	}
+	
 	QSqlDatabase sample_db = QSqlDatabase::addDatabase("QSQLITE", "stichprobenauswertung");
 	sample_db.setDatabaseName(":memory:");
 
