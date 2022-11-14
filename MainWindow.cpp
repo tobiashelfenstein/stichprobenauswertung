@@ -107,7 +107,7 @@ void MainWindow::fileImportAction()
 	FileImportDialog dlg_file_import; // TODO besser zeiger oder direkte Instanz
 	if (dlg_file_import.exec() == QDialog::Accepted)
 	{
-		this->model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toLatin1().constData());
+		this->model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toUtf8().constData());
 		//this->model->getMeasuring();
 	}
 	else // TODO

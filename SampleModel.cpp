@@ -86,6 +86,13 @@ void SampleModel::sendToHEP(MeasuredData data)
 		std::cout << "Fehler: HEP wurde nicht geöffnet!" << std::endl;
 	}
 
+	// TODO better solution
+	// diameteter have to be smaler than 10
+	if (data.diameter < 10)
+	{
+		return;
+	}
+	
 	QString send_string = this->prepareSendString(data);
 	if (this->automator->sendMeasuredValues(send_string.toStdString()))
 	{

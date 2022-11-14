@@ -29,5 +29,29 @@
 			<Height2/>
 			<Height3/>
 		</Tree>
+		<Tree>
+			<Species>2</Species>
+			<SpeciesText>Dou</SpeciesText>
+			<Diameter>80</Diameter>
+			<Height1/>
+			<Height2/>
+			<Height3/>
+		</Tree>
+		<Tree>
+			<Species>2</Species>
+			<SpeciesText>Dou</SpeciesText>
+			<Diameter>247</Diameter>
+			<Height1/>
+			<Height2/>
+			<Height3/>
+		</Tree>
+		<Tree>
+			<Species>2</Species>
+			<SpeciesText>Dou</SpeciesText>
+			<Diameter>100</Diameter>
+			<Height1/>
+			<Height2/>
+			<Height3/>
+		</Tree>
 	</Data>
 </MDIIDATA>
