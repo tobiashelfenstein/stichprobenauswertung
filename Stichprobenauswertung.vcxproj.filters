@@ -132,6 +132,7 @@
     <None Include="resources\icons\application-next.svg">
       <Filter>Resource Files\icons</Filter>
     </None>
+    <None Include="settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="icons.qrc">

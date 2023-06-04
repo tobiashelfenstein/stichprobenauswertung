@@ -17,19 +17,19 @@ public slots:
 
 public:
 	HaglofBluetoothImporter();
-	~HaglofBluetoothImporter();
+	~HaglofBluetoothImporter() {};
 
 	void open(QString port, qint64 rate);
 	void close();
 
 private:
-	QSerialPort* bt_port;
+	QSerialPort* m_pBT_port;
 
-	qint64 diameter = 0;
-	float length = 0.0;
+	qint64 m_diameter = 0;
+	float m_length = 0.0;
 
-	bool diameter_measured = false;
-	bool length_measured = false;
+	bool m_diameter_measured = false;
+	bool m_length_measured = false;
 
 	void parseHaglofNMEA(QByteArray* data);
 	void resetMeasuredData();

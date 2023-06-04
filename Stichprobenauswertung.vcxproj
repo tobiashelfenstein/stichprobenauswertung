@@ -140,6 +140,7 @@
     <None Include="resources\icons\application-menu.svg" />
     <None Include="resources\icons\application-next.svg" />
     <None Include="resources\icons\input-warning.svg" />
+    <None Include="settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="icons.qrc" />

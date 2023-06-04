@@ -10,16 +10,20 @@
 #include <iostream>
 #include <QMessagebox>
 #include <QtWidgets/QDialog>
+#include <QApplication>
+#include <QSettings>
 
 
 MainWindow::MainWindow() : QMainWindow()
 {
+	m_settingsFile = QApplication::applicationDirPath() + "settings.ini";
+	loadSettings();
 	// create model
 	// alternativ create the model in main function
-	this->model = new SampleModel();
+	model = new SampleModel();
 
 	// create main widget with buttons and set as central widget
-	this->setupUi();
+	setupUi();
 }
 
 MainWindow::~MainWindow()
@@ -27,9 +31,15 @@ MainWindow::~MainWindow()
 	// nothing to do
 }
 
+void MainWindow::loadSettings()
+{
+	QSettings settings(m_settingsFile, QSettings::NativeFormat);
+	m_serialPort = settings.value("ComPort", "").toString();
+}
+
 void MainWindow::setupUi()
 {
-	this->setWindowTitle("Stichprobenauswertung");
+	setWindowTitle("Stichprobenauswertung");
 
 	QWidget *central_widget = new QWidget();
 
@@ -59,7 +69,7 @@ void MainWindow::setupUi()
 
 	connect(btn_quit, &QPushButton::clicked, this, &MainWindow::close);
 
-	this->setCentralWidget(central_widget);
+	setCentralWidget(central_widget);
 
 	return;
 }
@@ -86,10 +96,10 @@ void MainWindow::blueImportAction()
 		with_length_and_diameter = true;
 	}
 
-	this->model->initializeImporter(HAGLOF, "\\\\.\\COM8", 9600, with_length_and_diameter);
+	model->initializeImporter(HAGLOF, with_length_and_diameter);
 
 	BluetoothProgressDialog dlg_progress;
-	connect(this->model, &SampleModel::hasSuccessfulSendToHep, &dlg_progress, &BluetoothProgressDialog::successfulSendToHep);
+	connect(model, &SampleModel::hasSuccessfulSendToHep, &dlg_progress, &BluetoothProgressDialog::successfulSendToHep);
 
 	dlg_progress.exec();
 
@@ -107,7 +117,7 @@ void MainWindow::fileImportAction()
 	FileImportDialog dlg_file_import; // TODO besser zeiger oder direkte Instanz
 	if (dlg_file_import.exec() == QDialog::Accepted)
 	{
-		this->model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toUtf8().constData());
+		model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toUtf8().constData());
 		//this->model->getMeasuring();
 	}
 	else // TODO
@@ -118,7 +128,7 @@ void MainWindow::fileImportAction()
 	SourceSelector dlg_source_selector;
 	if (dlg_source_selector.exec() == QDialog::Accepted)
 	{
-		this->model->readFromDatabase(dlg_source_selector.getMeasuring(), dlg_source_selector.getSpecies());
+		model->readFromDatabase(dlg_source_selector.getMeasuring(), dlg_source_selector.getSpecies());
 	}
 	else // TODO
 	{

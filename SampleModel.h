@@ -35,10 +35,10 @@ signals:
 
 public:
 	SampleModel();
-	~SampleModel();
+	~SampleModel() {};
 
 	void initializeImporter(qint64 manufacturer, const char* filename); // for files
-	void initializeImporter(qint64 manufacturer, QString port, qint64 rate, bool with_length_and_diameter = false); // for bluetooth
+	void initializeImporter(qint64 manufacturer, bool with_length_and_diameter = false); // for bluetooth
 	QStringList getMeasuring();
 	void readFromDatabase(QString measuring, QString species);
 
@@ -56,6 +56,13 @@ private:
 	void saveToDatabase(MeasuredData data);
 	void setMeasuring(QString measuring);
 	bool initializeDatabase();
+
+	QString m_settingsFile = "";
+	QString m_port_name = "";
+	qint64 m_baud_rate = 0;
+	qint64 m_max_diameter = 0;
+
+	void loadSettings();
 
 public slots:
 	void sendToHEP(MeasuredData data);

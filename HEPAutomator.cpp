@@ -67,14 +67,6 @@ bool HEPAutomator::sendMeasuredValues(std::string send_string)
 		// key down event for data
 		ip.ki.dwFlags = 0;
 		ip.ki.wVk = (send_string.at(i) == '.') ? VK_OEM_PERIOD : '0' + send_string.at(i);
-		//if (send_string.at(i) == '.')
-		//{
-		//	ip.ki.wVk = VK_OEM_PERIOD;
-		//}
-		//else
-		//{
-		//	ip.ki.wVk = '0' + send_string.at(i);
-		//}
 		inputs.push_back(ip);
 
 		// key up event for data

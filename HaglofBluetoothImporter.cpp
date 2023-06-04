@@ -8,31 +8,27 @@
 #include <QtCore/QList>
 #include <iostream>
 
+#include <qDebug>
+
 
 
 
 HaglofBluetoothImporter::HaglofBluetoothImporter() : AbstractImporter()
 {
-	this->bt_port = new QSerialPort(this);
-	connect(this->bt_port, &QSerialPort::readyRead, this, &HaglofBluetoothImporter::read);
+	// create serial port connection for bluetooth
+	m_pBT_port = new QSerialPort(this);
+	connect(m_pBT_port, &QSerialPort::readyRead, this, &HaglofBluetoothImporter::read);
 	connect(this, &HaglofBluetoothImporter::measured, this, &HaglofBluetoothImporter::pushMeasuredData);
-}
-
-HaglofBluetoothImporter::~HaglofBluetoothImporter()
-{
-	// nothing to do
 }
 
 void HaglofBluetoothImporter::open(QString com_port, qint64 baud_rate)
 {
 	// set up bluetooth serial port
-	this->bt_port->setPortName(com_port);
-	this->bt_port->setBaudRate(baud_rate);
+	m_pBT_port->setPortName(com_port);
+	m_pBT_port->setBaudRate(baud_rate);
 
 	// open connection
-	this->bt_port->open(QIODevice::ReadOnly);
-
-	return;
+	m_pBT_port->open(QIODevice::ReadOnly);
 }
 
 void HaglofBluetoothImporter::close()
@@ -42,11 +38,8 @@ void HaglofBluetoothImporter::close()
 
 void HaglofBluetoothImporter::read()
 {
-	QByteArray data = this->bt_port->readAll();
-	//QByteArray data = this->bt_port->readLine();
-	this->parseHaglofNMEA(&data);
-
-	return;
+	QByteArray data = m_pBT_port->readAll();
+	parseHaglofNMEA(&data);
 }
 
 void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
@@ -65,14 +58,14 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 			{
 			case 'D':
 				// parse diameter
-				if (this->diameter_measured)
+				if (this->m_diameter_measured)
 				{
 					std::cout << "Fehler: Länge wurde erwartet!" << std::endl;
 					break;
 				}
 
-				this->diameter = floor(nmea_fields[3].toInt() / 10);
-				this->diameter_measured = true;
+				m_diameter = floor(nmea_fields[3].toInt() / 10);
+				m_diameter_measured = true;
 
 				emit measured();
 
@@ -80,14 +73,14 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 
 			case 'L':
 				// parse length
-				if (!this->with_length_and_diameter || this->length_measured)
+				if (!with_length_and_diameter || m_length_measured)
 				{
 					std::cout << "Fehler: Durchmesser wurde erwartet!" << std::endl;
 					break;
 				}
 
-				this->length = nmea_fields[3].toFloat() / 10;
-				this->length_measured = true;
+				m_length = nmea_fields[3].toFloat() / 10;
+				m_length_measured = true;
 
 				emit measured();
 
@@ -96,35 +89,29 @@ void HaglofBluetoothImporter::parseHaglofNMEA(QByteArray* data)
 		}
 		
 	}
-
-	return;
 }
 
 void HaglofBluetoothImporter::pushMeasuredData()
 {
-	if (!this->diameter_measured || this->length_measured != this->with_length_and_diameter)
+	if (!m_diameter_measured || m_length_measured != with_length_and_diameter)
 	{
 		std::cout << "Kein Wert zu senden" << std::endl;
 		return;
 	}
 
-	MeasuredData data = { "", this->diameter, this->length };
+	MeasuredData data = { "", m_diameter, m_length };
 	emit hasMeasured(data);
 
-	this->resetMeasuredData();
-
-	return;
+	resetMeasuredData();
 }
 
 void HaglofBluetoothImporter::resetMeasuredData()
 {
 	// reset measured diameter
-	this->diameter = 0;
-	this->diameter_measured = false;
+	m_diameter = 0;
+	m_diameter_measured = false;
 
 	// reset measured length
-	this->length = 0;
-	this->length_measured = 0.0;
-
-	return;
+	m_length = 0;
+	m_length_measured = 0.0;
 }

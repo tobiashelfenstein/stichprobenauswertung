@@ -27,6 +27,10 @@ public slots:
 	void fileImportAction();
 
 private:
+	QString m_settingsFile = "";
+	QString m_serialPort = "";
 	SampleModel* model;
+
+	void loadSettings();
 };
 

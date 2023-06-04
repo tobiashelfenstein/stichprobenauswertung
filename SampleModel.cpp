@@ -6,53 +6,64 @@
 #include "HaglofBluetoothImporter.h"
 #include "MasserFileImporter.h"
 
+#include <QApplication>
+#include <QSettings>
+#include <qDebug>
+
 
 SampleModel::SampleModel() : QObject()
 {
-	this->automator = new HEPAutomator();
-	this->manufacturer = 0; // TODO, überprüfen, ob notwendig
+	// read bluetooth settings
+	m_settingsFile = QApplication::applicationDirPath() + "/" + "settings.ini";
+	loadSettings();
+
+	// class settings
+	automator = new HEPAutomator();
+	manufacturer = 0; // TODO, überprüfen, ob notwendig
 }
 
-SampleModel::~SampleModel()
+void SampleModel::loadSettings()
 {
-	// nothing to do
+	QSettings settings(m_settingsFile, QSettings::IniFormat);
+	m_port_name = settings.value("Bluetooth/ComPort", "").toString();
+	m_baud_rate = settings.value("Bluetooth/BaudRate", "").toInt();
+
+	m_max_diameter = settings.value("Automator/MaxDiameter", "").toInt();
 }
 
 void SampleModel::initializeImporter(qint64 manufacturer, const char* filename)
 {
 	this->manufacturer = manufacturer;
 
-	this->initializeDatabase();
+	initializeDatabase();
 
 	switch (this->manufacturer)
 	{
 	case MASSER:
 		// manufacture is masser
-		this->importer = new MasserFileImporter();
+		importer = new MasserFileImporter();
 		break;
 
 	case HAGLOF:
 		// manufacturer is haglöf
-		this->importer = new HaglofFileImporter();
+		importer = new HaglofFileImporter();
 		break;
 	}
 
-	connect(this->importer, &AbstractImporter::changeMeasuring, this, &SampleModel::setMeasuring);
-	connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::saveToDatabase);
+	connect(importer, &AbstractImporter::changeMeasuring, this, &SampleModel::setMeasuring);
+	connect(importer, &AbstractImporter::hasMeasured, this, &SampleModel::saveToDatabase);
 
-	this->importer->open(filename);
-
-	return;
+	importer->open(filename);
 }
 
 bool SampleModel::initializeDatabase()
 {
-	this->sample_db = new SampleDatabase();
+	sample_db = new SampleDatabase();
 
 	return true;
 }
 
-void SampleModel::initializeImporter(qint64 manufacturer, QString port, qint64 rate, bool with_length_and_diameter)
+void SampleModel::initializeImporter(qint64 manufacturer, bool with_length_and_diameter)
 {
 	this->manufacturer = manufacturer;
 	this->with_length_and_diameter = with_length_and_diameter;
@@ -67,12 +78,12 @@ void SampleModel::initializeImporter(qint64 manufacturer, QString port, qint64 r
 	case HAGLOF:
 		// manufacturer is haglöf
 		// open connection to serial port
-		this->importer = new HaglofBluetoothImporter();
-		this->importer->setLengthMeasurement(this->with_length_and_diameter);
-		this->importer->open(port, rate);
+		importer = new HaglofBluetoothImporter();
+		importer->setLengthMeasurement(this->with_length_and_diameter);
+		importer->open("\\\\.\\" + m_port_name, m_baud_rate);
 
 		// connect to importer events
-		connect(this->importer, &AbstractImporter::hasMeasured, this, &SampleModel::sendToHEP);
+		connect(importer, &AbstractImporter::hasMeasured, this, &SampleModel::sendToHEP);
 
 		break;
 	}
@@ -82,19 +93,18 @@ void SampleModel::sendToHEP(MeasuredData data)
 {
 	// for testing only
 	// better function needed
-	if (!this->automator->connectToHEP()) {
+	if (!automator->connectToHEP()) {
 		std::cout << "Fehler: HEP wurde nicht geöffnet!" << std::endl;
 	}
 
 	// TODO better solution
-	// diameteter have to be smaler than 10
-	if (data.diameter < 10)
+	if (data.diameter < m_max_diameter)
 	{
 		return;
 	}
 	
 	QString send_string = this->prepareSendString(data);
-	if (this->automator->sendMeasuredValues(send_string.toStdString()))
+	if (automator->sendMeasuredValues(send_string.toStdString()))
 	{
 		emit hasSuccessfulSendToHep(data);
 	}
@@ -123,14 +133,12 @@ QString SampleModel::prepareSendString(MeasuredData data)
 
 void SampleModel::setMeasuring(QString measuring)
 {
-	this->measuring_id = this->sample_db->setMeasuringProcess(measuring);
-
-	return;
+	measuring_id = sample_db->setMeasuringProcess(measuring);
 }
 
 QStringList SampleModel::getMeasuring()
 {
-	QStringList test = this->sample_db->getSpeciesByName();
+	QStringList test = sample_db->getSpeciesByName();
 	for (int i = 0; i < test.size(); i++)
 		std::cout << test.at(i).toLocal8Bit().constData() << std::endl;
 
@@ -139,17 +147,12 @@ QStringList SampleModel::getMeasuring()
 
 void SampleModel::saveToDatabase(MeasuredData data)
 {
-	this->sample_db->setMeasuredData(this->measuring_id, data);
-
-	return;
+	sample_db->setMeasuredData(this->measuring_id, data);
 }
 
 void SampleModel::readFromDatabase(QString measuring, QString species)
 {
-	connect(this->sample_db, &SampleDatabase::hasReadFromDatabase, this, &SampleModel::sendToHEP);
+	connect(sample_db, &SampleDatabase::hasReadFromDatabase, this, &SampleModel::sendToHEP);
 
-	this->sample_db->getMeasuredData(measuring, species);
-
-	return;
+	sample_db->getMeasuredData(measuring, species);
 }
-
