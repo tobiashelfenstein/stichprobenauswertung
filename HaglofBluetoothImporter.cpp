@@ -15,6 +15,9 @@
 
 HaglofBluetoothImporter::HaglofBluetoothImporter() : AbstractImporter()
 {
+	// this is a live importer
+	m_liveModus = true;
+
 	// create serial port connection for bluetooth
 	m_pBT_port = new QSerialPort(this);
 	connect(m_pBT_port, &QSerialPort::readyRead, this, &HaglofBluetoothImporter::read);

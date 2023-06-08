@@ -18,13 +18,15 @@ class AbstractImporter : public QObject
 
 public:
 	AbstractImporter() {}
-	virtual ~AbstractImporter() {}
+	~AbstractImporter() {}
 	virtual void open(const char* filename) {};
 	virtual void open(QString port, qint64 rate) {};
 	void setLengthMeasurement(bool with_length_and_diameter);
+	bool getLiveState();
 
 protected:
 	bool with_length_and_diameter = false;
+	bool m_liveModus = false; // for bluetooth live connection
 
 signals:
 	void changeMeasuring(QString measuring);

@@ -26,8 +26,6 @@ void HEPAutomator::connectToHEP()
 	}
 
 	ShowWindow(m_hWndHandle, SW_RESTORE); // neeed, if window is minimized
-	//Sleep(1000);
-
 	BringWindowToTop(m_hWndHandle);
 	SetForegroundWindow(m_hWndHandle);
 }

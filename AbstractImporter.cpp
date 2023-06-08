@@ -11,3 +11,8 @@ void AbstractImporter::setLengthMeasurement(bool with_length_and_diameter)
 
 	return;
 }
+
+bool AbstractImporter::getLiveState()
+{
+	return m_liveModus;
+}

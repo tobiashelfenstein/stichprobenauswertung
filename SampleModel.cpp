@@ -34,6 +34,9 @@ void SampleModel::loadSettings()
 
 void SampleModel::initializeImporter(qint64 manufacturer, const char* filename)
 {
+	// reset clear field indicator
+	m_clearField = true;
+
 	this->manufacturer = manufacturer;
 
 	initializeDatabase();
@@ -66,6 +69,9 @@ bool SampleModel::initializeDatabase()
 
 void SampleModel::initializeImporter(qint64 manufacturer, bool with_length_and_diameter)
 {
+	// reset clear field indicator
+	m_clearField = true;
+
 	this->manufacturer = manufacturer;
 	this->with_length_and_diameter = with_length_and_diameter;
 
@@ -92,7 +98,15 @@ void SampleModel::initializeImporter(qint64 manufacturer, bool with_length_and_d
 
 void SampleModel::sendToHEP(MeasuredData data)
 {
+	// connect to HEP
 	automator->connectToHEP();
+
+	// clear the field if necessary
+	if (m_clearField)
+	{
+		automator->clearInputField(3);
+		m_clearField = importer->getLiveState();
+	}
 
 	if (data.diameter >= m_max_diameter)
 	{
@@ -130,15 +144,6 @@ void SampleModel::setMeasuring(QString measuring)
 {
 	measuring_id = sample_db->setMeasuringProcess(measuring);
 }
-
-/*QStringList SampleModel::getMeasuring()
-{
-	QStringList test = sample_db->getSpeciesByName();
-	for (int i = 0; i < test.size(); i++)
-		std::cout << test.at(i).toLocal8Bit().constData() << std::endl;
-
-	return QStringList();
-}*/
 
 void SampleModel::saveToDatabase(MeasuredData data)
 {

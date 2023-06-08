@@ -39,7 +39,6 @@ public:
 
 	void initializeImporter(qint64 manufacturer, const char* filename); // for files
 	void initializeImporter(qint64 manufacturer, bool with_length_and_diameter = false); // for bluetooth
-	//QStringList getMeasuring();
 	void readFromDatabase(QString measuring, QString species);
 
 private:
@@ -63,6 +62,8 @@ private:
 	qint64 m_max_diameter = 0;
 
 	void loadSettings();
+
+	bool m_clearField = true;
 
 public slots:
 	void sendToHEP(MeasuredData data);
