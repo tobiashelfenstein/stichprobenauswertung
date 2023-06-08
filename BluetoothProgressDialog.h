@@ -21,11 +21,15 @@ class BluetoothProgressDialog : public QDialog
 
 public:
 	BluetoothProgressDialog();
-	~BluetoothProgressDialog();
+	~BluetoothProgressDialog() {};
 
 	void setupUi();
 
 public slots:
 	void successfulSendToHep(MeasuredData data);
+
+signals:
+	void measuredDiameter(const QString& diameter);
+	void measuredLength(const QString& length);
 };
 

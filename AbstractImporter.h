@@ -21,6 +21,7 @@ public:
 	~AbstractImporter() {}
 	virtual void open(const char* filename) {};
 	virtual void open(QString port, qint64 rate) {};
+	virtual void close() {};
 	void setLengthMeasurement(bool with_length_and_diameter);
 	bool getLiveState();
 

@@ -8,10 +8,6 @@
 #include <QtCore/QList>
 #include <iostream>
 
-#include <qDebug>
-
-
-
 
 HaglofBluetoothImporter::HaglofBluetoothImporter() : AbstractImporter()
 {
@@ -36,7 +32,11 @@ void HaglofBluetoothImporter::open(QString com_port, qint64 baud_rate)
 
 void HaglofBluetoothImporter::close()
 {
-
+	// check if the port is open before close it
+	if (m_pBT_port->isOpen())
+	{
+		m_pBT_port->close();
+	}
 }
 
 void HaglofBluetoothImporter::read()

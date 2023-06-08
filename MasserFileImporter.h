@@ -21,14 +21,17 @@ class MasserFileImporter : public AbstractImporter
 	const static char* species[];
 
 private:
+	QFile* m_txtfile = nullptr;
 	QString parseSpecies(QString *buffer);
+
 	int parseDiameter(QString* buffer);
 	int parseHeight(string* buffer);
 
 public:
-	MasserFileImporter();
-	~MasserFileImporter();
+	MasserFileImporter() {};
+	~MasserFileImporter() {};
 
 	void open(const char* filename);
+	void close();
 };
 

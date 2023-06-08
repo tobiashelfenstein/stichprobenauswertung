@@ -27,28 +27,16 @@ const char* MasserFileImporter::species[] = {
 };
 
 
-MasserFileImporter::MasserFileImporter()
-{
-	// nothing to do
-}
-
-MasserFileImporter::~MasserFileImporter()
-{
-	// nothing to do
-}
-
 void MasserFileImporter::open(const char* filename)
 {
-	QFile txtfile(filename);
-	txtfile.open(QFile::ReadOnly);
-
-	//ifstream txtFile(filename);
+	m_txtfile = new QFile(filename);
+	m_txtfile->open(QFile::ReadOnly);
 
 	string species, diameter;
 
 	MeasuredData entry;
 
-	QTextStream stream(&txtfile);
+	QTextStream stream(m_txtfile);
 	while (!stream.atEnd())
 	{
 		QString buffer = stream.readLine();
@@ -91,9 +79,17 @@ void MasserFileImporter::open(const char* filename)
 
 	}
 
-	txtfile.close();
+	// close the file after reading
+	m_txtfile->close();
+}
 
-	return;
+void MasserFileImporter::close()
+{
+	// check if file is open before close it
+	if (m_txtfile->isOpen())
+	{
+		m_txtfile->close();
+	}
 }
 
 QString MasserFileImporter::parseSpecies(QString *buffer)

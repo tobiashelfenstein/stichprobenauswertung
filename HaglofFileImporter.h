@@ -18,20 +18,20 @@ class HaglofFileImporter : public AbstractImporter
 	Q_OBJECT
 
 private:
+	QFile* m_xmlfile = nullptr;
 	QXmlStreamReader xml;
 	std::vector<MeasuredData> measuredData;
 
-	//BSTR readMeasuredData(IXMLDOMNode *node, bstr_t queryString);
-
-public:
-	HaglofFileImporter();
-	~HaglofFileImporter();
-
-	void open(const char *filename);
 	bool readAll();
 	void readTree();
-	void readMeasuredData(MeasuredData* entry);
 	void readHaglofData();
 	void readHgData();
+
+public:
+	HaglofFileImporter() {};
+	~HaglofFileImporter() {};
+
+	void open(const char *filename);
+	void close();
 };
 

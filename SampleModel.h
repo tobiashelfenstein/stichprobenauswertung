@@ -12,12 +12,6 @@
 #include "SampleDatabase.h"
 #include <QStringList>
 
-//struct MeasuredData
-//{
-//	std::wstring species;
-//	long diameter;
-//	long height1;
-//};
 
 enum MANUFACTURERS
 {
@@ -41,8 +35,10 @@ public:
 	void initializeImporter(qint64 manufacturer, bool with_length_and_diameter = false); // for bluetooth
 	void readFromDatabase(QString measuring, QString species);
 
+	void closeImporter();
+
 private:
-	HEPAutomator* automator;
+	HEPAutomator* automator = nullptr;
 	qint64 manufacturer;
 	AbstractImporter* importer = nullptr;
 	bool with_length_and_diameter = false;

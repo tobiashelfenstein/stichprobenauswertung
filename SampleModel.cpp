@@ -8,7 +8,6 @@
 
 #include <QApplication>
 #include <QSettings>
-#include <qDebug>
 #include <stdexcept>
 
 
@@ -155,4 +154,14 @@ void SampleModel::readFromDatabase(QString measuring, QString species)
 	connect(sample_db, &SampleDatabase::hasReadFromDatabase, this, &SampleModel::sendToHEP);
 
 	sample_db->getMeasuredData(measuring, species);
+}
+
+void SampleModel::closeImporter()
+{
+	importer->close();
+	delete importer;
+
+	importer = nullptr;
+
+	// what is with the database?!
 }

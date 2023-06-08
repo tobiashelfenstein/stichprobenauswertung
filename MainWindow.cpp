@@ -90,6 +90,7 @@ void MainWindow::blueImportAction()
 	
 	// this is the action
 	// TODO better solution; modal window
+	// open is recommended
 	try {
 		dlg_progress.exec();
 	}
@@ -105,20 +106,16 @@ void MainWindow::blueImportAction()
 		QApplication::exit(2);
 	}
 
-	return;
+	// always close the importer
+	model->closeImporter();
 }
 
 void MainWindow::fileImportAction()
 {
-	//this->model->initializeImporter(HAGLOF);
-	//this->model->initializeImporter(MASSER);
-	//this->model->getMeasuring();
-
 	FileImportDialog dlg_file_import; // TODO besser zeiger oder direkte Instanz
 	if (dlg_file_import.exec() == QDialog::Accepted)
 	{
 		model->initializeImporter(dlg_file_import.getDeviceIndex(), dlg_file_import.getFilePath().toUtf8().constData());
-		//this->model->getMeasuring();
 	}
 	else // TODO
 	{
@@ -150,5 +147,6 @@ void MainWindow::fileImportAction()
 		return;
 	}
 
-	return;
+	// always close the importer
+	model->closeImporter();
 }

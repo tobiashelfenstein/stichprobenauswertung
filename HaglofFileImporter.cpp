@@ -4,26 +4,25 @@
 #include "HaglofFileImporter.h"
 
 
-
-HaglofFileImporter::HaglofFileImporter() : AbstractImporter()
-{
-	// nothing to do
-}
-
-HaglofFileImporter::~HaglofFileImporter()
-{
-	// nothing to do
-}
-
 void HaglofFileImporter::open(const char *filename)
 {
-	QFile xmlfile(filename);
-	xmlfile.open(QFile::ReadOnly);
+	m_xmlfile = new QFile(filename);
+	m_xmlfile->open(QFile::ReadOnly);
 
-	this->xml.setDevice(&xmlfile);
+	this->xml.setDevice(m_xmlfile);
 	this->readAll();
 
-	return;
+	// close the file after reading
+	m_xmlfile->close();
+}
+
+void HaglofFileImporter::close()
+{
+	// check if file is open before close it
+	if (m_xmlfile->isOpen())
+	{
+		m_xmlfile->close();
+	}
 }
 
 bool HaglofFileImporter::readAll()
@@ -42,8 +41,7 @@ bool HaglofFileImporter::readAll()
 		}
 	}
 
-
-	return TRUE;
+	return true;
 }
 
 void HaglofFileImporter::readHaglofData()
@@ -107,6 +105,4 @@ void HaglofFileImporter::readTree()
 	}
 
 	this->hasMeasured(entry);
-
-	return;
 }
