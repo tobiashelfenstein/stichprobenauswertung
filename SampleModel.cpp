@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <qDebug>
+#include <stdexcept>
 
 
 SampleModel::SampleModel() : QObject()
@@ -91,22 +92,15 @@ void SampleModel::initializeImporter(qint64 manufacturer, bool with_length_and_d
 
 void SampleModel::sendToHEP(MeasuredData data)
 {
-	// for testing only
-	// better function needed
-	if (!automator->connectToHEP()) {
-		std::cout << "Fehler: HEP wurde nicht geöffnet!" << std::endl;
-	}
+	automator->connectToHEP();
 
-	// TODO better solution
-	if (data.diameter < m_max_diameter)
+	if (data.diameter >= m_max_diameter)
 	{
-		return;
-	}
-	
-	QString send_string = this->prepareSendString(data);
-	if (automator->sendMeasuredValues(send_string.toStdString()))
-	{
-		emit hasSuccessfulSendToHep(data);
+		QString send_string = prepareSendString(data);
+		if (automator->sendMeasuredValues(send_string.toStdString())) // TODO is if necessary?
+		{
+			emit hasSuccessfulSendToHep(data);
+		}
 	}
 
 	return;
@@ -119,6 +113,7 @@ QString SampleModel::prepareSendString(MeasuredData data)
 	if (this->with_length_and_diameter)
 	{
 		// format 18.026; length and diameter
+		// führende 'Null' ist nicht notwendig; #4
 		send_string = QString("%1%2").arg(data.length, 0, 'f', 1).arg(data.diameter);
 	}
 
@@ -136,14 +131,14 @@ void SampleModel::setMeasuring(QString measuring)
 	measuring_id = sample_db->setMeasuringProcess(measuring);
 }
 
-QStringList SampleModel::getMeasuring()
+/*QStringList SampleModel::getMeasuring()
 {
 	QStringList test = sample_db->getSpeciesByName();
 	for (int i = 0; i < test.size(); i++)
 		std::cout << test.at(i).toLocal8Bit().constData() << std::endl;
 
 	return QStringList();
-}
+}*/
 
 void SampleModel::saveToDatabase(MeasuredData data)
 {

@@ -56,12 +56,4 @@ void BluetoothProgressDialog::setupUi()
 void BluetoothProgressDialog::successfulSendToHep(MeasuredData data)
 {
 	Beep(2200, 500);
-
-	/*Beep(2000, 500);
-	Sleep(10);
-	Beep(2000, 3000);*/
-
-	
-
-	return;
 }

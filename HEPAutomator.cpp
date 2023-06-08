@@ -2,34 +2,34 @@
 // Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
 
 #include "HEPAutomator.h"
+#include <stdexcept>
+#include <QDebug>
 
 HEPAutomator::HEPAutomator()
 {
-	// nothing to do
-}
+	// find visible window of HEP and get the window handle
+	EnumWindows(findHEPVisibleWindow, (LPARAM)&m_hWndHandle);
 
-HEPAutomator::~HEPAutomator()
-{
-	// nothing to do
-}
-
-bool HEPAutomator::connectToHEP()
-{
-	HWND hWndHandle = NULL;
-	EnumWindows(findHEPVisibleWindow, (LPARAM)&hWndHandle);
-
-	if (hWndHandle != NULL && IsWindow(hWndHandle))
+	// throw exception, if HEP is not open
+	if (m_hWndHandle == NULL || !IsWindow(m_hWndHandle))
 	{
-		ShowWindow(hWndHandle, SW_RESTORE); // neeed, if window is minimized
-		//Sleep(1000);
+		throw std::runtime_error("HEPAutomator() hep is not open");
+	}
+}
 
-		BringWindowToTop(hWndHandle);
-		SetForegroundWindow(hWndHandle);
-
-		return TRUE;
+void HEPAutomator::connectToHEP()
+{
+	// check if hep was closed an throw an exception
+	if (m_hWndHandle == NULL || !IsWindow(m_hWndHandle))
+	{
+		throw std::runtime_error("hep was closed");
 	}
 
-	return FALSE;
+	ShowWindow(m_hWndHandle, SW_RESTORE); // neeed, if window is minimized
+	//Sleep(1000);
+
+	BringWindowToTop(m_hWndHandle);
+	SetForegroundWindow(m_hWndHandle);
 }
 
 BOOL CALLBACK HEPAutomator::findHEPVisibleWindow(HWND handle, LPARAM lparam)
@@ -47,18 +47,18 @@ BOOL CALLBACK HEPAutomator::findHEPVisibleWindow(HWND handle, LPARAM lparam)
 	{
 		if (IsWindowVisible(handle))
 		{
-			//std::wcout << handle << " " << caption << std::endl;
 			hWndHandle = handle;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 bool HEPAutomator::sendMeasuredValues(std::string send_string)
 {
 	// keyboard inputs
 	std::vector<INPUT> inputs;
+
 	INPUT ip = { 0 };
 	ip.type = INPUT_KEYBOARD;
 
@@ -86,4 +86,28 @@ bool HEPAutomator::sendMeasuredValues(std::string send_string)
 	SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 
 	return true;
+}
+
+void HEPAutomator::clearInputField(int bsCount)
+{
+	// keyboard inputs
+	std::vector<INPUT> backspaces;
+	INPUT bs = { 0 };
+	bs.type = INPUT_KEYBOARD;
+
+	// for loop is necessary to copmplety reset the input field
+	for (int i = 0; i < bsCount; i++)
+	{
+		// key down event for backspace
+		bs.ki.dwFlags = 0;
+		bs.ki.wVk = VK_BACK;
+		backspaces.push_back(bs);
+
+		// key up event for backspace
+		bs.ki.dwFlags = KEYEVENTF_KEYUP;
+		backspaces.push_back(bs);
+	}
+
+	// send backspcaes to HEP
+	SendInput(backspaces.size(), backspaces.data(), sizeof(INPUT));
 }

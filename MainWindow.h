@@ -18,19 +18,19 @@ class MainWindow : public QMainWindow
 
 public:
 	MainWindow();
-	~MainWindow();
+	~MainWindow() {};
 
-	void setupUi();
+	void setModel(SampleModel *model);
 
 public slots:
 	void blueImportAction();
 	void fileImportAction();
 
 private:
+	void setupUi();
+
 	QString m_settingsFile = "";
 	QString m_serialPort = "";
-	SampleModel* model;
-
-	void loadSettings();
+	SampleModel* model = nullptr;
 };
 

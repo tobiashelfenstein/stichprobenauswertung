@@ -39,7 +39,7 @@ public:
 
 	void initializeImporter(qint64 manufacturer, const char* filename); // for files
 	void initializeImporter(qint64 manufacturer, bool with_length_and_diameter = false); // for bluetooth
-	QStringList getMeasuring();
+	//QStringList getMeasuring();
 	void readFromDatabase(QString measuring, QString species);
 
 private:

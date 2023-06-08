@@ -12,14 +12,16 @@
 class HEPAutomator
 {
 private:
+	HWND m_hWndHandle = NULL;
 
 public:
 	HEPAutomator();
-	~HEPAutomator();
+	~HEPAutomator() {};
 
-	bool connectToHEP();
+	void connectToHEP();
 	static BOOL CALLBACK findHEPVisibleWindow(HWND handle, LPARAM lparam);
 
 	bool sendMeasuredValues(std::string send_string);
+	void clearInputField(int bsCount);
 };
 

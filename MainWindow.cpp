@@ -16,25 +16,13 @@
 
 MainWindow::MainWindow() : QMainWindow()
 {
-	m_settingsFile = QApplication::applicationDirPath() + "settings.ini";
-	loadSettings();
-	// create model
-	// alternativ create the model in main function
-	model = new SampleModel();
-
 	// create main widget with buttons and set as central widget
 	setupUi();
 }
 
-MainWindow::~MainWindow()
+void MainWindow::setModel(SampleModel* model)
 {
-	// nothing to do
-}
-
-void MainWindow::loadSettings()
-{
-	QSettings settings(m_settingsFile, QSettings::NativeFormat);
-	m_serialPort = settings.value("ComPort", "").toString();
+	this->model = model;
 }
 
 void MainWindow::setupUi()
@@ -77,33 +65,45 @@ void MainWindow::setupUi()
 void MainWindow::blueImportAction()
 {
 	// TODO
-	// settings dialog
-	// port selecion; baud selection
 	// lenth and diameter selection
 
 	// ask for length and diameter measuring
-	qint64 msg_ret = 0;
+	/*qint64 msg_ret = 0;
 	QMessageBox msg_box;
 	msg_box.setWindowTitle("Stichprobenauswertung");
 	msg_box.setIcon(QMessageBox::Question);
 	msg_box.setText("Nur Durchmesser übertragen?");
 	msg_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-	msg_box.setDefaultButton(QMessageBox::Yes);
+	msg_box.setDefaultButton(QMessageBox::Yes);*/
 
 	bool with_length_and_diameter = false;
-	if (msg_box.exec() == QMessageBox::No)
+	/*if (msg_box.exec() == QMessageBox::No)
 	{
 		with_length_and_diameter = true;
-	}
+	}*/
 
+	
 	model->initializeImporter(HAGLOF, with_length_and_diameter);
 
 	BluetoothProgressDialog dlg_progress;
 	connect(model, &SampleModel::hasSuccessfulSendToHep, &dlg_progress, &BluetoothProgressDialog::successfulSendToHep);
-
-	dlg_progress.exec();
-
 	
+	// this is the action
+	// TODO better solution; modal window
+	try {
+		dlg_progress.exec();
+	}
+	catch (std::runtime_error& e) {
+		QMessageBox msg_box;
+		msg_box.setWindowTitle("Stichprobenauswertung");
+		msg_box.setIcon(QMessageBox::Critical);
+		msg_box.setText("HEP wurde geschlossen! Bitte starten Sie HEP und öffnen Sie die Stichprobenauswertung anschließend erneut.");
+		msg_box.setStandardButtons(QMessageBox::Ok);
+
+		msg_box.exec();
+
+		QApplication::exit(2);
+	}
 
 	return;
 }
@@ -128,7 +128,22 @@ void MainWindow::fileImportAction()
 	SourceSelector dlg_source_selector;
 	if (dlg_source_selector.exec() == QDialog::Accepted)
 	{
-		model->readFromDatabase(dlg_source_selector.getMeasuring(), dlg_source_selector.getSpecies());
+		// at this point it's possible that hep was closed
+		// catch the exception and notify the user; then close the application
+		try {
+			model->readFromDatabase(dlg_source_selector.getMeasuring(), dlg_source_selector.getSpecies());
+		}
+		catch (std::runtime_error& e) {
+			QMessageBox msg_box;
+			msg_box.setWindowTitle("Stichprobenauswertung");
+			msg_box.setIcon(QMessageBox::Critical);
+			msg_box.setText("HEP wurde geschlossen! Bitte starten Sie HEP und öffnen Sie die Stichprobenauswertung anschließend erneut.");
+			msg_box.setStandardButtons(QMessageBox::Ok);
+
+			msg_box.exec();
+
+			QApplication::exit(2);
+		}
 	}
 	else // TODO
 	{
