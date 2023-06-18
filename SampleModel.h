@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+﻿// Copyright (C) 2023 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
 // Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
 
 #pragma once
@@ -38,8 +38,7 @@ public:
 	void closeImporter();
 
 private:
-	HEPAutomator* automator = nullptr;
-	qint64 manufacturer;
+	HEPAutomator* m_automator;
 	AbstractImporter* importer = nullptr;
 	bool with_length_and_diameter = false;
 
@@ -50,7 +49,8 @@ private:
 	QString prepareSendString(MeasuredData data);
 	void saveToDatabase(MeasuredData data);
 	void setMeasuring(QString measuring);
-	bool initializeDatabase();
+	void initializeDatabase();
+	void initializeAutomator();
 
 	QString m_settingsFile = "";
 	QString m_port_name = "";
@@ -59,7 +59,7 @@ private:
 
 	void loadSettings();
 
-	bool m_clearField = true;
+	bool m_repeat = true;
 
 public slots:
 	void sendToHEP(MeasuredData data);

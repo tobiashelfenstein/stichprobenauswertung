@@ -1,33 +1,28 @@
-﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+﻿// Copyright (C) 2023 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
 // Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
 
 #include "HEPAutomator.h"
 #include <stdexcept>
-#include <QDebug>
 
-HEPAutomator::HEPAutomator()
-{
-	// find visible window of HEP and get the window handle
-	EnumWindows(findHEPVisibleWindow, (LPARAM)&m_hWndHandle);
-
-	// throw exception, if HEP is not open
-	if (m_hWndHandle == NULL || !IsWindow(m_hWndHandle))
-	{
-		throw std::runtime_error("HEPAutomator() hep is not open");
-	}
-}
 
 void HEPAutomator::connectToHEP()
 {
-	// check if hep was closed an throw an exception
-	if (m_hWndHandle == NULL || !IsWindow(m_hWndHandle))
-	{
-		throw std::runtime_error("hep was closed");
-	}
+	// find visible window of HEP and get the window handle
+	HWND hWndHandle = NULL;
+	EnumWindows(findHEPVisibleWindow, (LPARAM)&hWndHandle);
 
-	ShowWindow(m_hWndHandle, SW_RESTORE); // neeed, if window is minimized
-	BringWindowToTop(m_hWndHandle);
-	SetForegroundWindow(m_hWndHandle);
+	if (hWndHandle != NULL && IsWindow(hWndHandle))
+	{
+		ShowWindow(hWndHandle, SW_RESTORE); // neeed, if window is minimized
+		//Sleep(1000);
+
+		BringWindowToTop(hWndHandle);
+		SetForegroundWindow(hWndHandle);
+	}
+	else
+	{
+		throw std::runtime_error("hep not open");
+	}
 }
 
 BOOL CALLBACK HEPAutomator::findHEPVisibleWindow(HWND handle, LPARAM lparam)

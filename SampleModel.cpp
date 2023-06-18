@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+﻿// Copyright (C) 2023 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
 // Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
 
 #include "SampleModel.h"
@@ -13,13 +13,12 @@
 
 SampleModel::SampleModel() : QObject()
 {
-	// read bluetooth settings
+	// read application settings
 	m_settingsFile = QApplication::applicationDirPath() + "/" + "settings.ini";
 	loadSettings();
 
 	// class settings
-	automator = new HEPAutomator();
-	manufacturer = 0; // TODO, überprüfen, ob notwendig
+	m_automator = new HEPAutomator();
 }
 
 void SampleModel::loadSettings()
@@ -34,13 +33,12 @@ void SampleModel::loadSettings()
 void SampleModel::initializeImporter(qint64 manufacturer, const char* filename)
 {
 	// reset clear field indicator
-	m_clearField = true;
+	m_repeat = true;
 
-	this->manufacturer = manufacturer;
-
+	// initialize sqlite3 database in memory
 	initializeDatabase();
 
-	switch (this->manufacturer)
+	switch (manufacturer)
 	{
 	case MASSER:
 		// manufacture is masser
@@ -59,22 +57,19 @@ void SampleModel::initializeImporter(qint64 manufacturer, const char* filename)
 	importer->open(filename);
 }
 
-bool SampleModel::initializeDatabase()
+void SampleModel::initializeDatabase()
 {
 	sample_db = new SampleDatabase();
-
-	return true;
 }
 
 void SampleModel::initializeImporter(qint64 manufacturer, bool with_length_and_diameter)
 {
 	// reset clear field indicator
-	m_clearField = true;
+	m_repeat = true;
 
-	this->manufacturer = manufacturer;
 	this->with_length_and_diameter = with_length_and_diameter;
 
-	switch (this->manufacturer)
+	switch (manufacturer)
 	{
 	case MASSER:
 		// manufacture is masser
@@ -98,19 +93,20 @@ void SampleModel::initializeImporter(qint64 manufacturer, bool with_length_and_d
 void SampleModel::sendToHEP(MeasuredData data)
 {
 	// connect to HEP
-	automator->connectToHEP();
+	m_automator->connectToHEP();
 
-	// clear the field if necessary
-	if (m_clearField)
+	// do things the first time and repeat them
+	if (m_repeat)
 	{
-		automator->clearInputField(3);
-		m_clearField = importer->getLiveState();
+		// clear input field
+		m_automator->clearInputField(3);
+		m_repeat = importer->getLiveState();
 	}
 
 	if (data.diameter >= m_max_diameter)
 	{
 		QString send_string = prepareSendString(data);
-		if (automator->sendMeasuredValues(send_string.toStdString())) // TODO is if necessary?
+		if (m_automator->sendMeasuredValues(send_string.toStdString())) // TODO is if necessary?
 		{
 			emit hasSuccessfulSendToHep(data);
 		}
@@ -159,8 +155,8 @@ void SampleModel::readFromDatabase(QString measuring, QString species)
 void SampleModel::closeImporter()
 {
 	importer->close();
+	
 	delete importer;
-
 	importer = nullptr;
 
 	// what is with the database?!

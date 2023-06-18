@@ -22,26 +22,8 @@ int main(int argc, char* argv[])
 
 	// create the main window for "stichprobenauswertung"
 	// create the model for the main window
-	// if hep is not open notify the user
 	// TODO better solution e.g. initialize model instead constructor
-	SampleModel* mainModel = nullptr;
-
-	try {
-		mainModel = new SampleModel();
-	}
-	catch (const std::runtime_error& e)
-	{
-		// notify the user
-		QMessageBox msg_box;
-		msg_box.setWindowTitle("Stichprobenauswertung");
-		msg_box.setIcon(QMessageBox::Critical);
-		msg_box.setText("HEP wurde nicht gestartet! Bitte starten Sie zuerst HEP.");
-		msg_box.setStandardButtons(QMessageBox::Ok);
-
-		msg_box.exec();
-		
-		return 1;
-	}
+	SampleModel* mainModel = new SampleModel();
 
 	MainWindow mainWindow;
 	mainWindow.setModel(mainModel);
