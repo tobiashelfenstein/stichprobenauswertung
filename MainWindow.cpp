@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
+﻿// Copyright (C) 2023 Tobias Helfenstein <tobias@die-softwarezimmerei.de>.
 // Licensed under the GPLv3 License. See LICENSE file in the project root for license information.
 
 #include "MainWindow.h"
@@ -58,8 +58,6 @@ void MainWindow::setupUi()
 	connect(btn_quit, &QPushButton::clicked, this, &MainWindow::close);
 
 	setCentralWidget(central_widget);
-
-	return;
 }
 
 void MainWindow::blueImportAction()

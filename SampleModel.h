@@ -50,7 +50,6 @@ private:
 	void saveToDatabase(MeasuredData data);
 	void setMeasuring(QString measuring);
 	void initializeDatabase();
-	void initializeAutomator();
 
 	QString m_settingsFile = "";
 	QString m_port_name = "";
